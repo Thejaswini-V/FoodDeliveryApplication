@@ -340,7 +340,8 @@
 import React, { useEffect, useState } from 'react';
 import axios from 'axios';
 import { motion } from 'framer-motion';
-import { FaCheckCircle, FaTimesCircle, FaUser } from 'react-icons/fa';
+import { FaCheckCircle, FaTimesCircle, FaUser, FaMapMarkerAlt, FaClock } from 'react-icons/fa';
+import { FiPhone } from 'react-icons/fi';
 
 const Dp_orders = () => {
   const [orders, setOrders] = useState([]);
@@ -349,9 +350,11 @@ const Dp_orders = () => {
   useEffect(() => {
     const fetchOrders = async () => {
       try {
-        const response = await axios.get('http://localhost:9000/api/delivery_partner/findOrders', { withCredentials: true });
+        const response = await axios.get(
+          'http://localhost:9000/api/delivery_partner/findOrders',
+          { withCredentials: true }
+        );
         const fetchedOrders = response.data;
-
         setOrders(fetchedOrders);
       } catch (err) {
         console.error('Error fetching orders:', err);
@@ -388,44 +391,92 @@ const Dp_orders = () => {
   };
 
   return (
-    <div className="container mx-auto p-6">
-      <h2 className="text-3xl font-bold mb-6 text-gray-800">Your Orders</h2>
-      {error && <p className="text-red-500 mb-4">{error}</p>}
-      <div className="grid gap-6 md:grid-cols-2 lg:grid-cols-3">
+    <div className="container mx-auto p-6 bg-gray-50 min-h-screen">
+      <motion.h2
+        initial={{ opacity: 0, y: -20 }}
+        animate={{ opacity: 1, y: 0 }}
+        transition={{ duration: 0.3 }}
+        className="text-3xl font-bold mb-8 text-gray-900"
+      >
+        Delivery Partner Orders
+      </motion.h2>
+      {error && (
+        <motion.p
+          initial={{ opacity: 0 }}
+          animate={{ opacity: 1 }}
+          transition={{ duration: 0.3 }}
+          className="text-red-500 mb-4"
+        >
+          {error}
+        </motion.p>
+      )}
+      <div className="space-y-8">
         {orders.map(order => (
           <motion.div
             key={order.orderId}
-            className="p-6 border border-gray-200 rounded-lg shadow-lg bg-white"
+            className="w-full p-6 bg-white rounded-lg shadow-md hover:shadow-lg transform transition-all duration-300 ease-in-out"
             initial={{ opacity: 0, y: 20 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.5 }}
           >
             <div className="flex items-center justify-between mb-4">
-              <h3 className="text-xl font-semibold text-gray-700">{order.items.map(item => item.foodName).join(', ')}</h3>
+              <h3 className="text-xl font-semibold text-gray-800">
+                Order ID: {order.orderId}
+              </h3>
               {order.orderStatus === 'Delivered' ? (
                 <FaCheckCircle className="text-green-500 text-2xl" />
               ) : (
                 <FaTimesCircle className="text-red-500 text-2xl" />
               )}
             </div>
-            <div className="space-y-2">
-              <p className="text-gray-600"><strong>Quantity:</strong> {order.items.reduce((acc, item) => acc + item.quantity, 0)}</p>
-              <p className="text-gray-600"><strong>Order Total:</strong> ${order.orderTotal}</p>
-              <p className="text-gray-600"><strong>Restaurant Name:</strong> {order.restName}</p>
-              <p className="text-gray-600"><strong>Suggestion:</strong> {order.items.map(item => item.suggestion).join(', ')}</p>
+            <div className="flex items-center justify-between mb-4">
+              <div>
+                <p className="text-gray-700 text-lg font-medium">
+                  <strong>Restaurant Name:</strong> {order.restName}
+                </p>
+                <p className="text-gray-600">
+                  <strong>Order Total:</strong> €{order.orderTotal}
+                </p>
+                <p className="text-gray-600">
+                  <strong>Food Items:</strong> {order.items.map((item) => item.foodName).join(', ')}
+                </p>
+              </div>
+              <div className="text-sm text-gray-600 flex items-center">
+                <FaClock className="text-yellow-500 mr-1" /> {/* Clock Icon */}
+                <span>Expected Delivery: {order.expectedDeliveryTime} mins</span>
+              </div>
+            </div>
+            <div className="flex flex-col md:flex-row justify-between items-start md:items-center">
+              <div className="mb-4 md:mb-0 flex-1">
+                <h4 className="text-lg font-semibold text-gray-700 flex items-center mb-2">
+                  <FaMapMarkerAlt className="mr-2 text-xl" /> Delivery Address:
+                </h4>
+                <p className="text-gray-600">{order.deliveryAddress}</p>
+                <h4 className="text-lg font-semibold text-gray-700 flex items-center mt-4 mb-2">
+                  <FiPhone className="mr-2 text-xl" /> Contact:
+                </h4>
+                <p className="text-gray-600">{order.customerPhone}</p>
+              </div>
+            </div>
+            <div className="border-t mt-4 pt-4">
+              <div className="flex justify-between items-center">
+                <span className="text-gray-600 font-medium">Total Amount</span>
+                <span className="text-lg font-bold text-gray-800">€{order.orderTotal}</span>
+              </div>
+              <div className="text-sm text-green-600 mt-2">
+                <span>You have saved €{order.discount} on the bill!</span>
+              </div>
             </div>
             <div className="mt-4">
-              <FaUser className="inline-block text-gray-500 mr-2" />
-              <span className="text-gray-500 text-sm">Order ID: {order.orderId}</span>
+              {order.orderStatus !== 'Delivered' && (
+                <button
+                  onClick={() => handleShipment(order.orderId)}
+                  className="w-full bg-orange-500 text-white py-3 rounded-lg shadow-lg hover:bg-orange-600 transition duration-200"
+                >
+                  Mark as Delivered
+                </button>
+              )}
             </div>
-            {order.orderStatus !== 'Delivered' && (
-              <button
-                onClick={() => handleShipment(order.orderId)}
-                className="bg-orange-500 text-white px-4 py-2 rounded hover:bg-orange-600 transition"
-              >
-                Mark as Delivered
-              </button>
-            )}
           </motion.div>
         ))}
       </div>

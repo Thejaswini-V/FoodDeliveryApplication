@@ -174,7 +174,9 @@ const Orders = () => {
           withCredentials: true,
         }
       );
+
       alert(response.data); // Display success message
+
       // Update the order status locally
       setOrders(prevOrders =>
         prevOrders.map(order =>
@@ -191,6 +193,7 @@ const Orders = () => {
 
   return (
     <div className="container mx-auto p-6">
+
       <motion.h2
         initial={{ opacity: 0, y: -20 }}
         animate={{ opacity: 1, y: 0 }}
@@ -199,6 +202,7 @@ const Orders = () => {
       >
         Your Orders
       </motion.h2>
+
       {error && (
         <motion.p
           initial={{ opacity: 0 }}
@@ -209,11 +213,12 @@ const Orders = () => {
           {error}
         </motion.p>
       )}
+
       <div className="grid gap-6 md:grid-cols-2 lg:grid-cols-3">
         {orders.map(order => (
           <motion.div
             key={order.orderId}
-            className="relative p-6 border border-gray-200 rounded-lg shadow-lg transition transform hover:-translate-y-1 hover:shadow-xl bg-white"
+            className="relative p-6 bg-white rounded-lg shadow-lg transition transform hover:-translate-y-1 hover:shadow-xl neumorphic"
             initial={{ opacity: 0, y: 20 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.3 }}
@@ -229,6 +234,7 @@ const Orders = () => {
                 {order.orderStatus}
               </span>
             </div>
+
             <div className="space-y-2">
               {order.items.map((item, index) => (
                 <div key={index} className="border-b border-gray-200 pb-2 mb-2">
@@ -243,17 +249,21 @@ const Orders = () => {
                   </p>
                 </div>
               ))}
+
               <p className="text-gray-600">
                 <strong>Order Total:</strong> ${order.orderTotal.toFixed(2)}
               </p>
-              
             </div>
+
             <div className="mt-4 flex justify-between items-center">
-              <FaUser className="inline-block text-gray-500 mr-2" />
+              <div className="flex items-center text-gray-500">
+                <FaUser className="inline-block mr-2" />
+                <span>{order.custName}</span> {/* Assuming custName is available */}
+              </div>
               {order.orderStatus !== 'Shipped' && (
                 <button
                   onClick={() => handleShipment(order.orderId)}
-                  className="bg-orange-500 text-white px-4 py-2 rounded hover:bg-orange-600 transition"
+                  className="bg-orange-500 text-white px-4 py-2 rounded hover:bg-orange-600 transition shadow-neumorphic"
                 >
                   Mark as Shipped
                 </button>

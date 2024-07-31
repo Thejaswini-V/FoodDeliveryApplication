@@ -21,13 +21,13 @@ const Del_landing = () => {
 
   return (
     <div className="flex h-screen bg-gray-100">
-      <nav className="w-1/4 bg-gradient-to-r from-green-500 to-teal-500 text-white p-6">
+      <nav className="w-1/4 bg-gradient-to-r from-purple-500 to-indigo-500 text-white p-6">
         <h2 className="text-4xl font-bold mb-8 text-center">Delivery Partner Dashboard</h2>
         <ul className="space-y-4">
           <li>
             <button
               onClick={() => setSelectedMenu('orders')}
-              className={`block w-full text-left py-3 px-5 rounded-lg transition-all ${selectedMenu === 'orders' ? 'bg-white text-green-500 shadow-lg' : 'hover:bg-green-400 hover:shadow-md'}`}
+              className={`block w-full text-left py-3 px-5 rounded-lg transition-all ${selectedMenu === 'orders' ? 'bg-white text-purple-500 shadow-lg' : 'hover:bg-purple-400 hover:shadow-md'}`}
             >
               Your Orders
             </button>
@@ -35,7 +35,7 @@ const Del_landing = () => {
           <li>
             <button
               onClick={() => setSelectedMenu('profile')}
-              className={`block w-full text-left py-3 px-5 rounded-lg transition-all ${selectedMenu === 'profile' ? 'bg-white text-green-500 shadow-lg' : 'hover:bg-green-400 hover:shadow-md'}`}
+              className={`block w-full text-left py-3 px-5 rounded-lg transition-all ${selectedMenu === 'profile' ? 'bg-white text-purple-500 shadow-lg' : 'hover:bg-purple-400 hover:shadow-md'}`}
             >
               Profile
             </button>
