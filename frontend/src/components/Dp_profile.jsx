@@ -27,7 +27,7 @@ const Dp_profile = () => {
   if (error) return <p className="text-red-500 text-center">{error}</p>;
 
   return (
-    <div className="flex justify-center items-center min-h-screen bg-gradient-to-r from-purple-500 to-indigo-500">
+    <div className="flex justify-center items-center min-h-screen bg-gradient-to-r from-orange-500 to-red-500">
       <motion.div
         initial={{ opacity: 0, scale: 0.95 }}
         animate={{ opacity: 1, scale: 1 }}

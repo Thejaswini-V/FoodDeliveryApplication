@@ -20,13 +20,13 @@ const Cust_page = () => {
 
   return (
     <div className="flex h-screen bg-gray-100">
-      <nav className="w-1/4 bg-gradient-to-r from-blue-500 to-teal-500 text-white p-6">
+      <nav className="w-1/4 bg-gradient-to-r from-orange-500 to-red-500 text-white p-6">
         <h2 className="text-4xl font-bold mb-8 text-center">Customer Dashboard</h2>
         <ul className="space-y-4">
           <li>
             <button
               onClick={() => setSelectedMenu('orders')}
-              className={`block w-full text-left py-3 px-5 rounded-lg transition-all ${selectedMenu === 'orders' ? 'bg-white text-blue-500 shadow-lg' : 'hover:bg-blue-400 hover:shadow-md'}`}
+              className={`block w-full text-left py-3 px-5 rounded-lg transition-all ${selectedMenu === 'orders' ? 'bg-white text-orange-500 shadow-lg' : 'hover:bg-orange-400 hover:shadow-md'}`}
             >
               Your Orders
             </button>
@@ -34,7 +34,7 @@ const Cust_page = () => {
           <li>
             <button
               onClick={() => setSelectedMenu('profile')}
-              className={`block w-full text-left py-3 px-5 rounded-lg transition-all ${selectedMenu === 'profile' ? 'bg-white text-blue-500 shadow-lg' : 'hover:bg-blue-400 hover:shadow-md'}`}
+              className={`block w-full text-left py-3 px-5 rounded-lg transition-all ${selectedMenu === 'profile' ? 'bg-white text-orange-500 shadow-lg' : 'hover:bg-orange-400 hover:shadow-md'}`}
             >
               Profile
             </button>

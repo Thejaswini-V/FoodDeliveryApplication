@@ -215,7 +215,7 @@ const Orders = () => {
       )}
 
       <div className="grid gap-6 md:grid-cols-2 lg:grid-cols-3">
-        {orders.map(order => (
+        {orders && orders.map(order => (
           <motion.div
             key={order.orderId}
             className="relative p-6 bg-white rounded-lg shadow-lg transition transform hover:-translate-y-1 hover:shadow-xl neumorphic"

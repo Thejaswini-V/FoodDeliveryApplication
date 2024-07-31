@@ -88,6 +88,18 @@ public class customerController {
         }
         return ResponseEntity.ok(restaurantDetails);
     }
+
+    @GetMapping("/searchwithtrie")
+public ResponseEntity<?> searchwithtrie(@RequestParam String name) {
+    List<Map<String, Object>> restaurantDetails = restaurantmenuService.searchWithTrie(name);
+    if (restaurantDetails == null || restaurantDetails.isEmpty()) {
+        return ResponseEntity.badRequest().body("No food items found with the given name");
+    }
+    return ResponseEntity.ok(restaurantDetails);
+}
+
+
+
     
 
 //    @GetMapping("/findOrders")

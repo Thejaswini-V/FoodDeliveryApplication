@@ -141,11 +141,85 @@ public class restaurantmenuService {
         restaurantmenu_Repository.updateAvailability(foodid,restid,avail);
     }
 
+    private Trie restaurantTrie;
+private Trie foodTrie;
+
+@PostConstruct
+public void init() {
+    // Initialize Tries
+    restaurantTrie = new Trie();
+    foodTrie = new Trie();
+
+    // Load restaurant names into Trie
+    List<restaurantModel> restaurants = convertIterableToList(restaurant_repo.findAll());
+    for (restaurantModel restaurant : restaurants) {
+        restaurantTrie.insert(restaurant.getRestName().toLowerCase());
+    }
+
+    // Load food names into Trie
+    List<itemModel> items = convertIterableToList(item_repo.findAll());
+    for (itemModel item : items) {
+        foodTrie.insert(item.getFoodName().toLowerCase());
+    }
+}
+
+private <T> List<T> convertIterableToList(Iterable<T> iterable) {
+    List<T> list = new ArrayList<>();
+    for (T item : iterable) {
+        list.add(item);
+    }
+    return list;
+}
+
+
     public List<restaurantmenuModel> findmenu(long restId){
 
         return restaurantmenu_Repository.findByRestId(restId);
 
     }
+    
+    public List<Map<String, Object>> searchWithTrie(String query) {
+        List<restaurantmenuModel> menuItems = new ArrayList<>();
+    
+        List<String> matchingRestaurants = restaurantTrie.startsWith(query.toLowerCase());
+        List<String> matchingFoods = foodTrie.startsWith(query.toLowerCase());
+    
+        // Search based on food items
+        for (String foodName : matchingFoods) {
+            itemModel item = item_repo.findByfoodName(foodName).orElse(null);
+            if (item != null) {
+                menuItems.addAll(restaurantmenu_Repository.findByFoodId(item.getFoodId()));
+            }
+        }
+    
+        // Search based on restaurant names
+        for (String restaurantName : matchingRestaurants) {
+            restaurantModel restaurant = restaurant_repo.findByRestName(restaurantName).orElse(null);
+            if (restaurant != null) {
+                menuItems.addAll(restaurantmenu_Repository.findByRestId(restaurant.getRestId()));
+            }
+        }
+    
+        // Return details of menu items
+        return menuItems.stream().map(menuItem -> {
+            itemModel matchedItem = item_repo.findByfoodId(menuItem.getFoodId());
+            restaurantModel matchedRestaurant = restaurant_repo.findById(menuItem.getRestId()).orElse(null);
+    
+            if (matchedItem == null || matchedRestaurant == null) {
+                return null;
+            }
+    
+            Map<String, Object> itemDetails = new HashMap<>();
+            itemDetails.put("restaurantName", matchedRestaurant.getRestName());
+            itemDetails.put("foodName", matchedItem.getFoodName());
+            itemDetails.put("foodPrice", menuItem.getFoodPrice());
+            itemDetails.put("foodCategory", matchedItem.getFoodCategory());
+            itemDetails.put("vegNonveg", matchedItem.isVegNonveg());
+            itemDetails.put("restaurantId", menuItem.getRestId());
+            return itemDetails;
+        }).filter(Objects::nonNull).collect(Collectors.toList());
+    }
+    
 
     
 }

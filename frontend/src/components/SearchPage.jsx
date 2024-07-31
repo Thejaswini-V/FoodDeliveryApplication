@@ -486,7 +486,7 @@ const SearchPage = () => {
   // Fetch data based on search term
   const fetchData = async (value) => {
     try {
-      const apiUrl = `http://localhost:9000/api/customers/search?name=${encodeURIComponent(value)}`;
+      const apiUrl = `http://localhost:9000/api/customers/searchwithtrie?name=${encodeURIComponent(value)}`;
       const response = await axios.get(apiUrl);
       setSearchResults(response.data);
       console.log(response.data);

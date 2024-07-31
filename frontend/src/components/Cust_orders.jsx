@@ -164,9 +164,9 @@ const Cust_orders = () => {
                         <p className="text-gray-600"><strong>Quantity:</strong> {item.quantity}</p>
                         <p className="text-gray-600"><strong>Suggestion:</strong> {item.suggestion || 'No suggestion'}</p>
                       </div>
-                      <div className="text-right">
+                      {/* <div className="text-right">
                         <p className="text-gray-600 font-semibold">€{(item.price * item.quantity).toFixed(2)}</p>
-                      </div>
+                      </div> */}
                     </div>
                   ))}
                 </div>
@@ -175,10 +175,10 @@ const Cust_orders = () => {
             <div className="border-t mt-4 pt-4">
               <div className="flex justify-between items-center">
                 <span className="text-gray-600 font-medium">Total Paid</span>
-                <span className="text-lg font-bold text-gray-800">€{order.orderTotal}</span>
+                <span className="text-lg font-bold text-gray-800">₹{order.orderTotal}</span>
               </div>
               <div className="text-sm text-green-600 mt-2">
-                <span>You have saved €{order.discount} on the bill!</span>
+                <span>You have saved ${order.discount} on the bill!</span>
               </div>
             </div>
             <div className="mt-4">
