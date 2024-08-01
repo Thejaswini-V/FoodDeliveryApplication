@@ -117,7 +117,7 @@ public ResponseEntity<List<OrderDisplayDTO>> findCustomerOrders(HttpSession sess
     if (custId == null) {
         return ResponseEntity.status(401).body(null); // Unauthorized if no custId in session
     }
-    List<OrderDisplayDTO> orders = orderService.findCustomerOrders(custId);
+    List<OrderDisplayDTO> orders = orderService.getOrdersByCustomerId(custId);
     return ResponseEntity.ok(orders);
 }
 }

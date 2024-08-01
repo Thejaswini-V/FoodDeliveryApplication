@@ -145,6 +145,7 @@ const Cust_orders = () => {
               <div>
                 <p className="text-gray-700 text-lg font-medium"><strong>Restaurant Name:</strong> {order.restName}</p>
                 <p className="text-gray-600"><strong>Order Total:</strong> €{order.orderTotal}</p>
+                <p className="text-gray-600"><strong>Order Status:</strong> {order.status}</p>
               </div>
               <div className="text-sm text-gray-600 flex items-center">
                 <FaRegClock className="text-yellow-500 mr-1" /> {/* Clock Icon */}

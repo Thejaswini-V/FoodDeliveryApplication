@@ -2,7 +2,7 @@
 
 import React, { useState, useEffect } from 'react';
 import axios from 'axios';
-import { FaBowlFood } from 'react-icons/fa'; // Import icon for usage
+// import { FaBowlFood } from 'react-icons/fa'; // Import icon for usage
 
 const AvailableFoods = () => {
   const [foods, setFoods] = useState([]);
@@ -40,7 +40,7 @@ const AvailableFoods = () => {
   return (
     <div className="bg-white shadow-md rounded-lg p-6">
       <h2 className="text-2xl font-bold mb-4 flex items-center">
-        <FaBowlFood className="mr-3 text-orange-500" />
+        {/* <FaBowlFood className="mr-3 text-orange-500" /> */}
         Available Foods
       </h2>
       <div className="overflow-x-auto">

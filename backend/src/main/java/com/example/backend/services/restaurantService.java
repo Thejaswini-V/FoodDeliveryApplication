@@ -121,5 +121,11 @@ public class restaurantService {
         order_Service.updateOrderStatus(orderId, "Shipped");
         //payment.createPayment(orderId);
     }
+
+    public void approve(Long restId){
+        restaurantModel rest = restaurant_Repository.findByRestId(restId);
+        rest.setApprove_status("approved");
+        restaurant_Repository.save(rest);
+    }
     
 }

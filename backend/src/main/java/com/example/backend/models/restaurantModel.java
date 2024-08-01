@@ -38,4 +38,8 @@ public class restaurantModel {
     @Size(min = 4, message = "Restaurant password must be at least 4 characters long")
     @Column(name = "rest_pswd")
     private String restPswd;
+
+
+    @Column(name="approval")
+    private String approve_status;
 }

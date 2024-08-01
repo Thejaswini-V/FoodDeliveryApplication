@@ -450,12 +450,13 @@ const Dp_orders = () => {
               <div className="mb-4 md:mb-0 flex-1">
                 <h4 className="text-lg font-semibold text-gray-700 flex items-center mb-2">
                   <FaMapMarkerAlt className="mr-2 text-xl" /> Delivery Address:
+                  
                 </h4>
-                <p className="text-gray-600">{order.deliveryAddress}</p>
+                <p className="text-gray-600">{order.location}</p>
                 <h4 className="text-lg font-semibold text-gray-700 flex items-center mt-4 mb-2">
                   <FiPhone className="mr-2 text-xl" /> Contact:
                 </h4>
-                <p className="text-gray-600">{order.customerPhone}</p>
+                <p className="text-gray-600">{order.custPhone}</p>
               </div>
             </div>
             <div className="border-t mt-4 pt-4">

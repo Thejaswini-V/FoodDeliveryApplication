@@ -80,6 +80,7 @@ public class deliveryPartnerController {
             return ResponseEntity.badRequest().body("Invalid credentials");
         }
     }
+    
     @PostMapping("/logout")
     public ResponseEntity<String> logout(HttpSession session) {
         session.invalidate();

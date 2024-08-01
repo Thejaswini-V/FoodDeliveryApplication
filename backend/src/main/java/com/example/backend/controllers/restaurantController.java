@@ -86,7 +86,7 @@ public ResponseEntity<String> findRestName(@RequestParam Long restId) {
     @PostMapping("/login")
     public ResponseEntity<String> login(@RequestParam String email, @RequestParam String password, HttpSession session) {
         restaurantModel restaurant = restaurantRepository.findByRestMail(email);
-        if (restaurant != null) {
+        if (restaurant != null && restaurant.getApprove_status().equals("approved")) {
             session.setAttribute("restId", restaurant.getRestId());
             return ResponseEntity.ok("Login successful");
         } else {
@@ -100,7 +100,18 @@ public ResponseEntity<String> findRestName(@RequestParam Long restId) {
         return ResponseEntity.ok("Logout successful");
     }
 
-    
+    @PostMapping("/approval")
+    public ResponseEntity<String> approval(@RequestParam Long restId) {
+        restaurantModel restaurant = restaurantRepository.findByRestId(restId);
+        if (restaurant != null) {
+            //session.setAttribute("restId", restaurant.getRestId());
+            restaurant_Service.approve(restId);
+            return ResponseEntity.ok("Approved successfully");
+        } else {
+            return ResponseEntity.status(401).body("Cannot Approve");
+        }
+    }
+
     @PostMapping("/shipped")
     public ResponseEntity<String> shipped(HttpSession session,@RequestParam Long order_id) {
         try {

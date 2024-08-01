@@ -40,7 +40,9 @@ public class OrderDisplayDTO {
     private CustomerDTO customer;
     // Added customer location
     private Long delivery_id;
-
+    private String status;
+    private String location;
+    private Long custPhone;
     public OrderDisplayDTO(Long orderId,String restName,float ordertotal,List<OrderItemDTO> item){
         this.orderId=orderId;
         this.restName=restName;
