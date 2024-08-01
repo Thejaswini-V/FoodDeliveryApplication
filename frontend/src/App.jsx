@@ -17,6 +17,7 @@ import Cust_page from "./components/Cust_page"
 import RestaurantDetails from "./components/RestaurantDetails";
 import OrderSummary from "./components/OrderSummary";
 import SearchPage from "./components/SearchPage";
+import AdminDashboard from "./components/AdminDashboard";
 
 function App() {
   return (
@@ -39,6 +40,7 @@ function App() {
         <Route path="/restaurant/:id" element={<RestaurantDetails />}/>
         <Route path="/orderSummary" element={<OrderSummary />} />
         <Route path="/search" element={<SearchPage/>} />
+        <Route path='/admin' element={<AdminDashboard/>} />
         
       </Routes>
     </BrowserRouter>

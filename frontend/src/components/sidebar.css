@@ -1,0 +1,25 @@
+/* Sidebar item custom styling */
+.sidebar-item {
+    display: flex;
+    align-items: center;
+    padding: 0.75rem 1.5rem;
+    font-size: 1rem;
+    font-weight: 500;
+    cursor: pointer;
+    transition: background-color 0.2s, color 0.2s;
+  }
+  
+  .sidebar-item:hover {
+    background-color: #cdd2db;
+    color: chocolate; /* Light gray hover background */
+  }
+  
+  .sidebar-item svg {
+    margin-right: 0.75rem;
+    font-size: 1.25rem;
+  }
+  
+  .sidebar-item.bg-gray-200 {
+    background-color: #f3f4f6; /* Lighter gray for active */
+  }
+  
