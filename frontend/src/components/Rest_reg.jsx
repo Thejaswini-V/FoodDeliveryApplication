@@ -227,6 +227,8 @@ const Rest_reg = () => {
               type="tel"
               id="restPhone"
               name="restPhone"
+              minLength="10"
+              maxLength="10" 
               value={formData.restPhone}
               onChange={handleChange}
               placeholder="Enter restaurant phone number"

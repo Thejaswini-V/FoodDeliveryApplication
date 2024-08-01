@@ -178,6 +178,8 @@ const Del_reg = () => {
               type="tel"
               id="deliveryPhn"
               name="deliveryPhn"
+              minLength="10"
+              maxLength="10" 
               value={formData.deliveryPhn}
               onChange={handleChange}
               placeholder="Enter your phone number"

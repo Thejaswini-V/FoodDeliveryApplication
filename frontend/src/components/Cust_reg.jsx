@@ -101,6 +101,8 @@ const Cust_reg = () => {
               type="tel"
               id="custPhone"
               name="custPhone"
+              minLength="10"
+              maxLength="10" 
               value={formData.custPhone}
               onChange={handleChange}
               placeholder="Enter your phone number"

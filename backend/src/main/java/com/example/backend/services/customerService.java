@@ -4,6 +4,7 @@ import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import com.example.backend.models.OrderDisplayDTO;
 import com.example.backend.models.customerModel;
 import com.example.backend.models.orderModel;
+import com.example.backend.models.rolesModel;
 import com.example.backend.repositories.customerRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -20,6 +21,8 @@ public class customerService {
     @Autowired
     private orderService order_Service;
 
+    @Autowired
+    private rolesService rolesService;
     private final BCryptPasswordEncoder passwordEncoder = new BCryptPasswordEncoder();
 
     public customerModel saveCustomer(customerModel customer) {
@@ -61,4 +64,8 @@ public class customerService {
         return order_Service.getOrdersByCustomerId(custId);
     }
 
+    public void forgetPassword(String email, String pass){
+        int role = rolesService.findRole(email);
+        
+    }
 }
