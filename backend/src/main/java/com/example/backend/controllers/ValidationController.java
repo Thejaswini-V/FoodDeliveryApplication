@@ -32,6 +32,7 @@ public class ValidationController {
     private restaurantRepository restaurantRepository;
     @Autowired
     private deliverypartnerRepository deliverypartnerRepository;
+    
     @PostMapping("/forgetPassword")
     public ResponseEntity<String> forget(@RequestParam String email, @RequestParam String password) {
         int role = rolesService.findRole(email);
@@ -58,4 +59,30 @@ public class ValidationController {
         }
     }
 
+    // @PostMapping("/updatePassword")
+    // public ResponseEntity<String> update(@RequestParam String email, @RequestParam String oldpassword, @RequestParam String newpassword) {
+    //     int role = rolesService.findRole(email);
+    //     if(role == 1){
+    //         customerModel dp = customer_repo.findByCustMail(email);
+
+    //         //dp.setCustPswd(passwordEncoder.encode(password));
+    //         customer_repo.save(dp);
+    //         return ResponseEntity.ok("Updated successfully");
+    //     }
+    //     else if(role == 2){
+    //         restaurantModel dp = restaurantRepository.findByRestMail(email);
+    //         //dp.setRestPswd(passwordEncoder.encode(password));
+    //         restaurantRepository.save(dp);
+    //         return ResponseEntity.ok("Updated successfully");
+    //     }
+    //     else if(role == 3){
+    //         deliverypartnerModel dp = deliverypartnerRepository.findByDpMail(email);
+    //         //dp.setDpPswd(passwordEncoder.encode(password));
+    //         deliverypartnerRepository.save(dp);
+    //         return ResponseEntity.ok("Updated successfully");
+    //     }
+    //     else {
+    //         return ResponseEntity.badRequest().body("Invalid credentials");
+    //     }
+    // }
 }

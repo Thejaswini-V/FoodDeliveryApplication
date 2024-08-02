@@ -12,6 +12,8 @@
   },
   "dependencies": {
     "@mui/material": "^5.16.4",
+    "@stripe/react-stripe-js": "^2.7.3",
+    "@stripe/stripe-js": "^4.1.0",
     "axios": "^1.7.2",
     "emailjs-com": "^3.2.0",
     "framer-motion": "^11.3.8",

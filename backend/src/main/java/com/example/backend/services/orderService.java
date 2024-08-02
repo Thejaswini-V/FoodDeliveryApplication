@@ -90,6 +90,7 @@ public List<OrderDisplayDTO> getOrdersByDeliveryPartnerId(Long dpId) {
             String status = (String) result[11];
             String location = (String) result[12];
             Long phone = ((Number) result[13]).longValue();
+            String rest_add = (String) result[14];
             // Find if an existing OrderDisplayDTO for this orderId exists
             OrderDisplayDTO orderDisplayDTO = dtoList.stream()
                     .filter(dto -> dto.getOrderId().equals(orderId))
@@ -107,6 +108,7 @@ public List<OrderDisplayDTO> getOrdersByDeliveryPartnerId(Long dpId) {
                 orderDisplayDTO.setStatus(status);
                 orderDisplayDTO.setLocation(location);
                 orderDisplayDTO.setCustPhone(phone);
+                orderDisplayDTO.setRest_addr(rest_add);
                 // Add customer details
                 CustomerDTO customerDTO = new CustomerDTO();
                 customerDTO.setCustomerName(customerName);

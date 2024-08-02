@@ -24,7 +24,10 @@ public interface orderDetailRepository extends CrudRepository<OrderDetails,Long>
             c.cust_phone AS customerPhone, 
             c.cust_address AS customerAddress,
             o.delivery_id,
-            o.order_status
+            o.order_status,
+            c.cust_address,
+            c.cust_phone,
+            r.rest_address
         FROM 
             order_details od
         JOIN 
@@ -57,7 +60,8 @@ public interface orderDetailRepository extends CrudRepository<OrderDetails,Long>
             o.delivery_id,
             o.order_status,
             c.cust_address,
-            c.cust_phone
+            c.cust_phone,
+            r.rest_address
         FROM 
             order_details od
         JOIN 
@@ -87,7 +91,11 @@ public interface orderDetailRepository extends CrudRepository<OrderDetails,Long>
             c.cust_name AS customerName, 
             c.cust_phone AS customerPhone, 
             c.cust_address AS customerAddress,
-            o.delivery_id
+            o.delivery_id,
+            o.order_status,
+            c.cust_address,
+            c.cust_phone,
+            r.rest_address
         FROM 
             order_details od
         JOIN 

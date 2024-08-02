@@ -499,9 +499,6 @@ import iconUrl from 'leaflet/dist/images/marker-icon.png';
 import shadowUrl from 'leaflet/dist/images/marker-shadow.png';
 
 // Custom Leaflet marker icon
-
-
-// Custom Leaflet marker icon
 delete L.Icon.Default.prototype._getIconUrl;
 L.Icon.Default.mergeOptions({
   iconRetinaUrl,
@@ -520,13 +517,20 @@ const Dp_orders = () => {
           'http://localhost:9000/api/delivery_partner/findOrders',
           { withCredentials: true }
         );
+
         const fetchedOrders = response.data;
 
-        // Fetch coordinates for each order location
+        // Fetch coordinates for each order's delivery and restaurant location
         const updatedOrders = await Promise.all(
           fetchedOrders.map(async (order) => {
-            const coordinates = await getCoordinates(order.location);
-            return { ...order, coordinates };
+            const deliveryCoordinates = await getCoordinates(order.location);
+            const restaurantCoordinates = await getCoordinates(order.rest_addr);
+
+            return {
+              ...order,
+              deliveryCoordinates,
+              restaurantCoordinates,
+            };
           })
         );
 
@@ -573,8 +577,8 @@ const Dp_orders = () => {
       );
       alert(response.data); // Display success message
       // Update the order status locally
-      setOrders(prevOrders =>
-        prevOrders.map(order =>
+      setOrders((prevOrders) =>
+        prevOrders.map((order) =>
           order.orderId === orderId
             ? { ...order, orderStatus: 'Delivered' }
             : order
@@ -607,7 +611,7 @@ const Dp_orders = () => {
         </motion.p>
       )}
       <div className="space-y-8">
-        {orders.map(order => (
+        {orders.map((order) => (
           <motion.div
             key={order.orderId}
             className="w-full p-6 bg-white rounded-lg shadow-md hover:shadow-lg transform transition-all duration-300 ease-in-out"
@@ -634,7 +638,8 @@ const Dp_orders = () => {
                   <strong>Order Total:</strong> €{order.orderTotal}
                 </p>
                 <p className="text-gray-600">
-                  <strong>Food Items:</strong> {order.items.map((item) => item.foodName).join(', ')}
+                  <strong>Food Items:</strong>{' '}
+                  {order.items.map((item) => item.foodName).join(', ')}
                 </p>
               </div>
               <div className="text-sm text-gray-600 flex items-center">
@@ -648,16 +653,24 @@ const Dp_orders = () => {
                   <FaMapMarkerAlt className="mr-2 text-xl" /> Delivery Address:
                 </h4>
                 <p className="text-gray-600">{order.location}</p>
+                <h4 className="text-lg font-semibold text-gray-700 flex items-center mb-2">
+                  <FaMapMarkerAlt className="mr-2 text-xl" /> Restaurant Address:
+                </h4>
+                <p className="text-gray-600">{order.rest_addr}</p>
                 <h4 className="text-lg font-semibold text-gray-700 flex items-center mt-4 mb-2">
                   <FiPhone className="mr-2 text-xl" /> Contact:
                 </h4>
                 <p className="text-gray-600">{order.custPhone}</p>
               </div>
             </div>
-            {/* Display Leaflet Map */}
-            {order.coordinates && (
+
+            {/* Display Leaflet Map with both Delivery and Restaurant Address Pins */}
+            {order.deliveryCoordinates && order.restaurantCoordinates && (
               <MapContainer
-                center={[order.coordinates.lat, order.coordinates.lon]}
+                center={[
+                  (order.deliveryCoordinates.lat + order.restaurantCoordinates.lat) / 2,
+                  (order.deliveryCoordinates.lon + order.restaurantCoordinates.lon) / 2,
+                ]}
                 zoom={13}
                 style={{ width: '100%', height: '300px' }}
               >
@@ -665,18 +678,38 @@ const Dp_orders = () => {
                   url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png"
                   attribution='&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'
                 />
-                <Marker position={[order.coordinates.lat, order.coordinates.lon]}>
+
+                {/* Marker for Delivery Location */}
+                <Marker position={[order.deliveryCoordinates.lat, order.deliveryCoordinates.lon]}>
                   <Popup>
-                    <strong>Delivery Location</strong><br />
+                    <strong>Delivery Location</strong>
+                    <br />
                     {order.location}
+                  </Popup>
+                </Marker>
+
+                {/* Marker for Restaurant Location */}
+                <Marker
+                  position={[
+                    order.restaurantCoordinates.lat,
+                    order.restaurantCoordinates.lon,
+                  ]}
+                >
+                  <Popup>
+                    <strong>Restaurant Location</strong>
+                    <br />
+                    {order.rest_addr}
                   </Popup>
                 </Marker>
               </MapContainer>
             )}
+
             <div className="border-t mt-4 pt-4">
               <div className="flex justify-between items-center">
                 <span className="text-gray-600 font-medium">Total Amount</span>
-                <span className="text-lg font-bold text-gray-800">€{order.orderTotal}</span>
+                <span className="text-lg font-bold text-gray-800">
+                  €{order.orderTotal}
+                </span>
               </div>
               <div className="text-sm text-green-600 mt-2">
                 <span>You have saved €{order.discount} on the bill!</span>
@@ -700,4 +733,5 @@ const Dp_orders = () => {
 };
 
 export default Dp_orders;
+
 

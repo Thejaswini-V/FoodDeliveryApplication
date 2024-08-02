@@ -43,6 +43,7 @@ public class OrderDisplayDTO {
     private String status;
     private String location;
     private Long custPhone;
+    private String rest_addr;
     public OrderDisplayDTO(Long orderId,String restName,float ordertotal,List<OrderItemDTO> item){
         this.orderId=orderId;
         this.restName=restName;
