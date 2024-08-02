@@ -117,7 +117,9 @@ const Cust_orders = () => {
       }
     };
 
-    fetchOrders();
+    const interval = setInterval(() => {
+      fetchOrders();
+    }, 1000);
   }, []);
 
   return (
@@ -144,7 +146,7 @@ const Cust_orders = () => {
             <div className="flex items-center justify-between mb-4">
               <div>
                 <p className="text-gray-700 text-lg font-medium"><strong>Restaurant Name:</strong> {order.restName}</p>
-                <p className="text-gray-600"><strong>Order Total:</strong> €{order.orderTotal}</p>
+                <p className="text-gray-600"><strong>Order Total:</strong> ₹{order.orderTotal}</p>
                 <p className="text-gray-600"><strong>Order Status:</strong> {order.status}</p>
               </div>
               <div className="text-sm text-gray-600 flex items-center">
@@ -166,7 +168,7 @@ const Cust_orders = () => {
                         <p className="text-gray-600"><strong>Suggestion:</strong> {item.suggestion || 'No suggestion'}</p>
                       </div>
                       {/* <div className="text-right">
-                        <p className="text-gray-600 font-semibold">€{(item.price * item.quantity).toFixed(2)}</p>
+                        <p className="text-gray-600 font-semibold">₹{(item.price * item.quantity).toFixed(2)}</p>
                       </div> */}
                     </div>
                   ))}
@@ -178,9 +180,7 @@ const Cust_orders = () => {
                 <span className="text-gray-600 font-medium">Total Paid</span>
                 <span className="text-lg font-bold text-gray-800">₹{order.orderTotal}</span>
               </div>
-              <div className="text-sm text-green-600 mt-2">
-                <span>You have saved ${order.discount} on the bill!</span>
-              </div>
+              
             </div>
             <div className="mt-4">
               <button className="w-full bg-orange-500 text-white py-3 rounded-lg shadow-lg hover:bg-green-600 transition duration-200">

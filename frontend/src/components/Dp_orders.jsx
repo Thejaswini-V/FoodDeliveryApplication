@@ -435,7 +435,7 @@
 //                   <strong>Restaurant Name:</strong> {order.restName}
 //                 </p>
 //                 <p className="text-gray-600">
-//                   <strong>Order Total:</strong> €{order.orderTotal}
+//                   <strong>Order Total:</strong> ₹{order.orderTotal}
 //                 </p>
 //                 <p className="text-gray-600">
 //                   <strong>Food Items:</strong> {order.items.map((item) => item.foodName).join(', ')}
@@ -462,10 +462,10 @@
 //             <div className="border-t mt-4 pt-4">
 //               <div className="flex justify-between items-center">
 //                 <span className="text-gray-600 font-medium">Total Amount</span>
-//                 <span className="text-lg font-bold text-gray-800">€{order.orderTotal}</span>
+//                 <span className="text-lg font-bold text-gray-800">₹{order.orderTotal}</span>
 //               </div>
 //               <div className="text-sm text-green-600 mt-2">
-//                 <span>You have saved €{order.discount} on the bill!</span>
+//                 <span>You have saved ₹{order.discount} on the bill!</span>
 //               </div>
 //             </div>
 //             <div className="mt-4">
@@ -541,7 +541,9 @@ const Dp_orders = () => {
       }
     };
 
-    fetchOrders();
+    const interval = setInterval(() => {
+      fetchOrders();
+    }, 1000);
   }, []);
 
   // Function to fetch coordinates for an address using OpenStreetMap Nominatim API
@@ -635,7 +637,7 @@ const Dp_orders = () => {
                   <strong>Restaurant Name:</strong> {order.restName}
                 </p>
                 <p className="text-gray-600">
-                  <strong>Order Total:</strong> €{order.orderTotal}
+                  <strong>Order Total:</strong> ₹{order.orderTotal}
                 </p>
                 <p className="text-gray-600">
                   <strong>Food Items:</strong>{' '}
@@ -708,12 +710,10 @@ const Dp_orders = () => {
               <div className="flex justify-between items-center">
                 <span className="text-gray-600 font-medium">Total Amount</span>
                 <span className="text-lg font-bold text-gray-800">
-                  €{order.orderTotal}
+                  ₹{order.orderTotal}
                 </span>
               </div>
-              <div className="text-sm text-green-600 mt-2">
-                <span>You have saved €{order.discount} on the bill!</span>
-              </div>
+              
             </div>
             <div className="mt-4">
               {order.orderStatus !== 'Delivered' && (

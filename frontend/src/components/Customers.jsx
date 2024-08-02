@@ -19,7 +19,9 @@ const Customers = () => {
       }
     };
 
-    fetchCustomers();
+    const interval = setInterval(() => {
+      fetchCustomers();
+    }, 1000);
   }, []);
 
   // Pagination logic

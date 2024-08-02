@@ -305,7 +305,9 @@ const Mymenu = () => {
 
   useEffect(() => {
 
-    fetchMenu();
+    const interval = setInterval(() => {
+      fetchMenu();
+    }, 1000);
 
   }, []);
 

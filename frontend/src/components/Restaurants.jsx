@@ -65,7 +65,9 @@ const Restaurants = () => {
       }
     };
 
-    fetchRestaurants();
+    const interval = setInterval(() => {
+      fetchRestaurants();
+    }, 1000);
   }, []);
 
   // Function to handle approval

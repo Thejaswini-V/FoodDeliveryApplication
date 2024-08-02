@@ -14,7 +14,9 @@ const DeliveryPartners = () => {
       }
     };
 
-    fetchDeliveryPartners();
+    const interval = setInterval(() => {
+      fetchDeliveryPartners();
+    }, 1000);
   }, []);
 
   return (
