@@ -541,9 +541,7 @@ const Dp_orders = () => {
       }
     };
 
-    const interval = setInterval(() => {
-      fetchOrders();
-    }, 1000);
+    fetchOrders();
   }, []);
 
   // Function to fetch coordinates for an address using OpenStreetMap Nominatim API
@@ -553,6 +551,8 @@ const Dp_orders = () => {
         params: {
           q: address,
           format: 'json',
+          addressdetails: 1,
+          limit: 1,
         },
       });
 
@@ -667,7 +667,7 @@ const Dp_orders = () => {
             </div>
 
             {/* Display Leaflet Map with both Delivery and Restaurant Address Pins */}
-            {order.deliveryCoordinates && order.restaurantCoordinates && (
+            {order.deliveryCoordinates && order.restaurantCoordinates ? (
               <MapContainer
                 center={[
                   (order.deliveryCoordinates.lat + order.restaurantCoordinates.lat) / 2,
@@ -704,6 +704,8 @@ const Dp_orders = () => {
                   </Popup>
                 </Marker>
               </MapContainer>
+            ) : (
+              <p>Loading map...</p>
             )}
 
             <div className="border-t mt-4 pt-4">
@@ -713,7 +715,6 @@ const Dp_orders = () => {
                   ₹{order.orderTotal}
                 </span>
               </div>
-              
             </div>
             <div className="mt-4">
               {order.orderStatus !== 'Delivered' && (
@@ -733,5 +734,3 @@ const Dp_orders = () => {
 };
 
 export default Dp_orders;
-
-

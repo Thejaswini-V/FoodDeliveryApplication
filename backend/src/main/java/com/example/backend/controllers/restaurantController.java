@@ -112,6 +112,18 @@ public ResponseEntity<String> findRestName(@RequestParam Long restId) {
         }
     }
 
+    @PostMapping("/rejection")
+    public ResponseEntity<String> rejection(@RequestParam Long restId) {
+        restaurantModel restaurant = restaurantRepository.findByRestId(restId);
+        if (restaurant != null) {
+            //session.setAttribute("restId", restaurant.getRestId());
+            restaurant_Service.reject(restId);
+            return ResponseEntity.ok("Rejected successfully");
+        } else {
+            return ResponseEntity.status(401).body("Cannot Reject");
+        }
+    }
+
     @PostMapping("/shipped")
     public ResponseEntity<String> shipped(HttpSession session,@RequestParam Long order_id) {
         try {

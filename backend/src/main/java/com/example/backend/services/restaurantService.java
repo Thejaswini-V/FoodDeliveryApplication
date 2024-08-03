@@ -127,5 +127,11 @@ public class restaurantService {
         rest.setApprove_status("approved");
         restaurant_Repository.save(rest);
     }
+
+    public void reject(Long restId){
+        restaurantModel rest = restaurant_Repository.findByRestId(restId);
+        rest.setApprove_status("Rejected");
+        restaurant_Repository.save(rest);
+    }
     
 }
