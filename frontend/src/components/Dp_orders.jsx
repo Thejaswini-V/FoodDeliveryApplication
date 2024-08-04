@@ -509,10 +509,12 @@ L.Icon.Default.mergeOptions({
 const Dp_orders = () => {
   const [orders, setOrders] = useState([]);
   const [error, setError] = useState('');
+  const [loading, setLoading] = useState(true);
 
   useEffect(() => {
     const fetchOrders = async () => {
       try {
+        setLoading(true);
         const response = await axios.get(
           'http://localhost:9000/api/delivery_partner/findOrders',
           { withCredentials: true }
@@ -525,6 +527,24 @@ const Dp_orders = () => {
           fetchedOrders.map(async (order) => {
             const deliveryCoordinates = await getCoordinates(order.location);
             const restaurantCoordinates = await getCoordinates(order.rest_addr);
+            if (deliveryCoordinates && restaurantCoordinates) {
+              const distance = haversineDistance(
+                deliveryCoordinates.lat,
+                deliveryCoordinates.lon,
+                restaurantCoordinates.lat,
+                restaurantCoordinates.lon
+              );
+
+              const averageSpeed = 40; // Average speed in km/h
+              const estimatedTime = Math.ceil((distance / averageSpeed) * 60); // Time in minutes
+
+              return {
+                ...order,
+                deliveryCoordinates,
+                restaurantCoordinates,
+                estimatedDeliveryTime: estimatedTime,
+              };
+            }
 
             return {
               ...order,
@@ -539,9 +559,14 @@ const Dp_orders = () => {
         console.error('Error fetching orders:', err);
         setError('There was an error fetching the orders!');
       }
+      finally{
+        setLoading(false);
+      }
     };
 
-    fetchOrders();
+    const interval = setInterval(() => {
+      fetchOrders();
+    }, 1000);
   }, []);
 
   // Function to fetch coordinates for an address using OpenStreetMap Nominatim API
@@ -565,6 +590,16 @@ const Dp_orders = () => {
       console.error('Error fetching coordinates:', error);
       return null;
     }
+  };
+  const haversineDistance = (lat1, lon1, lat2, lon2) => {
+    const R = 6371; // Radius of the Earth in kilometers
+    const dLat = (lat2 - lat1) * (Math.PI / 180);
+    const dLon = (lon2 - lon1) * (Math.PI / 180);
+    const a = Math.sin(dLat / 2) * Math.sin(dLat / 2) +
+              Math.cos(lat1 * (Math.PI / 180)) * Math.cos(lat2 * (Math.PI / 180)) *
+              Math.sin(dLon / 2) * Math.sin(dLon / 2);
+    const c = 2 * Math.atan2(Math.sqrt(a), Math.sqrt(1 - a));
+    return R * c; // Distance in kilometers
   };
 
   const handleShipment = async (orderId) => {
@@ -594,6 +629,16 @@ const Dp_orders = () => {
 
   return (
     <div className="container mx-auto p-6 bg-gray-50 min-h-screen">
+      {loading ? (
+        <div className="flex justify-center items-center min-h-screen">
+          <img
+            src="./images/car.gif"
+            alt="Loading..."
+            style={{ width: '512px', height: '512px' }}
+          />
+        </div>
+      ) :(
+        <>
       <motion.h2
         initial={{ opacity: 0, y: -20 }}
         animate={{ opacity: 1, y: 0 }}
@@ -646,7 +691,7 @@ const Dp_orders = () => {
               </div>
               <div className="text-sm text-gray-600 flex items-center">
                 <FaClock className="text-yellow-500 mr-1" /> {/* Clock Icon */}
-                <span>Expected Delivery: {order.expectedDeliveryTime} mins</span>
+                <span>Estimated Delivery: {order.estimatedDeliveryTime || order.expectedDeliveryTime} mins</span>
               </div>
             </div>
             <div className="flex flex-col md:flex-row justify-between items-start md:items-center">
@@ -729,6 +774,8 @@ const Dp_orders = () => {
           </motion.div>
         ))}
       </div>
+      </>
+      )}
     </div>
   );
 };

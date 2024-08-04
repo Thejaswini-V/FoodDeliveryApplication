@@ -45,8 +45,11 @@ import Restaurants from './Restaurants';
 import DeliveryPartners from './DeliveryPartners';
 import OrderStats from './OrderStats';
 import AvailableFoods from './AvailableFoods'; // Import AvailableFoods component
+import { useNavigate } from 'react-router-dom';
+import { FaArrowLeft, FaSignOutAlt, FaUserCircle, FaClipboardList } from 'react-icons/fa';
 
 const AdminDashboard = () => {
+  const navigate = useNavigate();
   const [activeTab, setActiveTab] = useState('customers');
 
   const renderContent = () => {
@@ -68,6 +71,7 @@ const AdminDashboard = () => {
 
   return (
     <div className="flex min-h-screen bg-gray-100">
+      
       <Sidebar setActiveTab={setActiveTab} />
       <div className="flex-1 ml-64 p-6">
         {renderContent()}

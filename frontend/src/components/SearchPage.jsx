@@ -471,7 +471,7 @@
 // export default SearchPage;
 import React, { useState, useEffect } from 'react';
 import axios from 'axios';
-import { useNavigate, Link } from 'react-router-dom';
+import { useNavigate, Link, useLocation } from 'react-router-dom';
 import { FaSearch, FaArrowLeft, FaShoppingCart, FaPlus, FaMinus, FaCheckCircle } from 'react-icons/fa';
 
 const SearchPage = () => {
@@ -482,6 +482,7 @@ const SearchPage = () => {
   const [totalPrice, setTotalPrice] = useState(0);
   const [orderConfirmed, setOrderConfirmed] = useState(false);
   const navigate = useNavigate();
+  const location = useLocation();
 
   // Fetch data based on search term
   const fetchData = async (value) => {
@@ -609,10 +610,19 @@ const SearchPage = () => {
     setVisibleCount((prevCount) => prevCount + 10);
   };
 
-  // Initial fetch of cart details
+  // Initial fetch of cart details and search term setup
   useEffect(() => {
+    // Extract search term from query parameters
+    const queryParams = new URLSearchParams(location.search);
+    const name = queryParams.get('name') || '';
+    setSearchTerm(name);
+
+    if (name) {
+      fetchData(name);
+    }
+
     fetchCartDetails();
-  }, []);
+  }, [location.search]);
 
   return (
     <div className="min-h-screen bg-gray-100">

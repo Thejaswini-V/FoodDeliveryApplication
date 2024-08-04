@@ -89,10 +89,10 @@ const Cust_page = () => {
             className="flex items-center mb-6 space-x-3 p-3 rounded-lg hover:bg-orange-500 transition-all"
           >
             <FaArrowLeft className="text-2xl" />
-            <span className="text-lg font-medium">Go Back</span>
+            
           </button>
           
-          <h2 className="text-4xl font-bold mb-8 text-center">Customer Dashboard</h2>
+          
           
           <ul className="space-y-4">
             <li>

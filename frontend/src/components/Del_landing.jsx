@@ -4,10 +4,12 @@ import Orders from './Dp_orders';
 import Profile from './Dp_profile';
 import Dp_orders from './Dp_orders';
 import Dp_profile from './Dp_profile';
+import { FaSignOutAlt } from 'react-icons/fa';
+import { useNavigate } from 'react-router-dom';
 
 const Del_landing = () => {
   const [selectedMenu, setSelectedMenu] = useState('orders');
-
+  const navigate=useNavigate();
   const renderComponent = () => {
     switch (selectedMenu) {
       case 'orders':
@@ -41,6 +43,15 @@ const Del_landing = () => {
             </button>
           </li>
         </ul>
+        <div>
+          <button
+            onClick={() => navigate('/')}
+            className="flex items-center space-x-3 hover:bg-orange-500 hover:shadow-md transition-all p-3 rounded-lg w-full"
+          >
+            <FaSignOutAlt className="text-2xl" />
+            <span className="text-lg font-medium">Logout</span>
+          </button>
+        </div>
       </nav>
       <div className="flex-1 p-10 bg-gray-100 overflow-auto">
         <motion.div

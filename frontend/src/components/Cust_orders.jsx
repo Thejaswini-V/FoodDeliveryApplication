@@ -150,8 +150,8 @@ const Cust_orders = () => {
                 <p className="text-gray-600"><strong>Order Status:</strong> {order.status}</p>
               </div>
               <div className="text-sm text-gray-600 flex items-center">
-                <FaRegClock className="text-yellow-500 mr-1" /> {/* Clock Icon */}
-                <span>Expected Delivery: {order.expectedDeliveryTime} mins</span>
+                {/* <FaRegClock className="text-yellow-500 mr-1" /> {/* Clock Icon */}
+                {/* <span>Expected Delivery: {order.expectedDeliveryTime} mins</span> */} 
               </div>
             </div>
             <div className="flex flex-col md:flex-row justify-between items-start md:items-center">
