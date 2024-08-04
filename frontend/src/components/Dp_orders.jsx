@@ -489,7 +489,7 @@
 import React, { useEffect, useState } from 'react';
 import axios from 'axios';
 import { motion } from 'framer-motion';
-import { FaCheckCircle, FaTimesCircle, FaUser, FaMapMarkerAlt, FaClock } from 'react-icons/fa';
+import { FaCheckCircle, FaTimesCircle, FaMapMarkerAlt, FaClock } from 'react-icons/fa';
 import { FiPhone } from 'react-icons/fi';
 import { MapContainer, TileLayer, Marker, Popup } from 'react-leaflet';
 import 'leaflet/dist/leaflet.css';
@@ -558,15 +558,15 @@ const Dp_orders = () => {
       } catch (err) {
         console.error('Error fetching orders:', err);
         setError('There was an error fetching the orders!');
-      }
-      finally{
+      } finally {
         setLoading(false);
       }
     };
 
-    const interval = setInterval(() => {
-      fetchOrders();
-    }, 1000);
+    fetchOrders(); // Initial fetch
+    const interval = setInterval(fetchOrders, 10000); // Fetch every 10 seconds
+
+    return () => clearInterval(interval); // Clear interval on component unmount
   }, []);
 
   // Function to fetch coordinates for an address using OpenStreetMap Nominatim API
@@ -591,6 +591,7 @@ const Dp_orders = () => {
       return null;
     }
   };
+
   const haversineDistance = (lat1, lon1, lat2, lon2) => {
     const R = 6371; // Radius of the Earth in kilometers
     const dLat = (lat2 - lat1) * (Math.PI / 180);
@@ -637,144 +638,144 @@ const Dp_orders = () => {
             style={{ width: '512px', height: '512px' }}
           />
         </div>
-      ) :(
+      ) : (
         <>
-      <motion.h2
-        initial={{ opacity: 0, y: -20 }}
-        animate={{ opacity: 1, y: 0 }}
-        transition={{ duration: 0.3 }}
-        className="text-3xl font-bold mb-8 text-gray-900"
-      >
-        Delivery Partner Orders
-      </motion.h2>
-      {error && (
-        <motion.p
-          initial={{ opacity: 0 }}
-          animate={{ opacity: 1 }}
-          transition={{ duration: 0.3 }}
-          className="text-red-500 mb-4"
-        >
-          {error}
-        </motion.p>
-      )}
-      <div className="space-y-8">
-        {orders.map((order) => (
-          <motion.div
-            key={order.orderId}
-            className="w-full p-6 bg-white rounded-lg shadow-md hover:shadow-lg transform transition-all duration-300 ease-in-out"
-            initial={{ opacity: 0, y: 20 }}
+          <motion.h2
+            initial={{ opacity: 0, y: -20 }}
             animate={{ opacity: 1, y: 0 }}
-            transition={{ duration: 0.5 }}
+            transition={{ duration: 0.3 }}
+            className="text-3xl font-bold mb-8 text-gray-900"
           >
-            <div className="flex items-center justify-between mb-4">
-              <h3 className="text-xl font-semibold text-gray-800">
-                Order ID: {order.orderId}
-              </h3>
-              {order.orderStatus === 'Delivered' ? (
-                <FaCheckCircle className="text-green-500 text-2xl" />
-              ) : (
-                <FaTimesCircle className="text-red-500 text-2xl" />
-              )}
-            </div>
-            <div className="flex items-center justify-between mb-4">
-              <div>
-                <p className="text-gray-700 text-lg font-medium">
-                  <strong>Restaurant Name:</strong> {order.restName}
-                </p>
-                <p className="text-gray-600">
-                  <strong>Order Total:</strong> ₹{order.orderTotal}
-                </p>
-                <p className="text-gray-600">
-                  <strong>Food Items:</strong>{' '}
-                  {order.items.map((item) => item.foodName).join(', ')}
-                </p>
-              </div>
-              <div className="text-sm text-gray-600 flex items-center">
-                <FaClock className="text-yellow-500 mr-1" /> {/* Clock Icon */}
-                <span>Estimated Delivery: {order.estimatedDeliveryTime || order.expectedDeliveryTime} mins</span>
-              </div>
-            </div>
-            <div className="flex flex-col md:flex-row justify-between items-start md:items-center">
-              <div className="mb-4 md:mb-0 flex-1">
-                <h4 className="text-lg font-semibold text-gray-700 flex items-center mb-2">
-                  <FaMapMarkerAlt className="mr-2 text-xl" /> Delivery Address:
-                </h4>
-                <p className="text-gray-600">{order.location}</p>
-                <h4 className="text-lg font-semibold text-gray-700 flex items-center mb-2">
-                  <FaMapMarkerAlt className="mr-2 text-xl" /> Restaurant Address:
-                </h4>
-                <p className="text-gray-600">{order.rest_addr}</p>
-                <h4 className="text-lg font-semibold text-gray-700 flex items-center mt-4 mb-2">
-                  <FiPhone className="mr-2 text-xl" /> Contact:
-                </h4>
-                <p className="text-gray-600">{order.custPhone}</p>
-              </div>
-            </div>
-
-            {/* Display Leaflet Map with both Delivery and Restaurant Address Pins */}
-            {order.deliveryCoordinates && order.restaurantCoordinates ? (
-              <MapContainer
-                center={[
-                  (order.deliveryCoordinates.lat + order.restaurantCoordinates.lat) / 2,
-                  (order.deliveryCoordinates.lon + order.restaurantCoordinates.lon) / 2,
-                ]}
-                zoom={13}
-                style={{ width: '100%', height: '300px' }}
+            Delivery Partner Orders
+          </motion.h2>
+          {error && (
+            <motion.p
+              initial={{ opacity: 0 }}
+              animate={{ opacity: 1 }}
+              transition={{ duration: 0.3 }}
+              className="text-red-500 mb-4"
+            >
+              {error}
+            </motion.p>
+          )}
+          <div className="space-y-8">
+            {orders.map((order) => (
+              <motion.div
+                key={order.orderId}
+                className="w-full p-6 bg-white rounded-lg shadow-md hover:shadow-lg transform transition-all duration-300 ease-in-out"
+                initial={{ opacity: 0, y: 20 }}
+                animate={{ opacity: 1, y: 0 }}
+                transition={{ duration: 0.5 }}
               >
-                <TileLayer
-                  url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png"
-                  attribution='&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'
-                />
+                <div className="flex items-center justify-between mb-4">
+                  <h3 className="text-xl font-semibold text-gray-800">
+                    Order ID: {order.orderId}
+                  </h3>
+                  {order.orderStatus === 'Delivered' ? (
+                    <FaCheckCircle className="text-green-500 text-2xl" />
+                  ) : (
+                    <FaTimesCircle className="text-red-500 text-2xl" />
+                  )}
+                </div>
+                <div className="flex items-center justify-between mb-4">
+                  <div>
+                    <p className="text-gray-700 text-lg font-medium">
+                      <strong>Restaurant Name:</strong> {order.restName}
+                    </p>
+                    <p className="text-gray-600">
+                      <strong>Order Total:</strong> ₹{order.orderTotal}
+                    </p>
+                    <p className="text-gray-600">
+                      <strong>Food Items:</strong>{' '}
+                      {order.items.map((item) => item.foodName).join(', ')}
+                    </p>
+                  </div>
+                  <div className="text-sm text-gray-600 flex items-center">
+                    <FaClock className="text-yellow-500 mr-1" /> {/* Clock Icon */}
+                    <span>Estimated Delivery: {order.estimatedDeliveryTime || order.expectedDeliveryTime} mins</span>
+                  </div>
+                </div>
+                <div className="flex flex-col md:flex-row justify-between items-start md:items-center">
+                  <div className="mb-4 md:mb-0 flex-1">
+                    <h4 className="text-lg font-semibold text-gray-700 flex items-center mb-2">
+                      <FaMapMarkerAlt className="mr-2 text-xl" /> Delivery Address:
+                    </h4>
+                    <p className="text-gray-600">{order.location}</p>
+                    <h4 className="text-lg font-semibold text-gray-700 flex items-center mb-2">
+                      <FaMapMarkerAlt className="mr-2 text-xl" /> Restaurant Address:
+                    </h4>
+                    <p className="text-gray-600">{order.rest_addr}</p>
+                    <h4 className="text-lg font-semibold text-gray-700 flex items-center mt-4 mb-2">
+                      <FiPhone className="mr-2 text-xl" /> Contact:
+                    </h4>
+                    <p className="text-gray-600">{order.custPhone}</p>
+                  </div>
+                </div>
 
-                {/* Marker for Delivery Location */}
-                <Marker position={[order.deliveryCoordinates.lat, order.deliveryCoordinates.lon]}>
-                  <Popup>
-                    <strong>Delivery Location</strong>
-                    <br />
-                    {order.location}
-                  </Popup>
-                </Marker>
+                {/* Display Leaflet Map with both Delivery and Restaurant Address Pins */}
+                {order.deliveryCoordinates && order.restaurantCoordinates ? (
+                  <MapContainer
+                    center={[
+                      (order.deliveryCoordinates.lat + order.restaurantCoordinates.lat) / 2,
+                      (order.deliveryCoordinates.lon + order.restaurantCoordinates.lon) / 2,
+                    ]}
+                    zoom={13}
+                    style={{ width: '100%', height: '300px' }}
+                  >
+                    <TileLayer
+                      url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png"
+                      attribution='&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'
+                    />
 
-                {/* Marker for Restaurant Location */}
-                <Marker
-                  position={[
-                    order.restaurantCoordinates.lat,
-                    order.restaurantCoordinates.lon,
-                  ]}
-                >
-                  <Popup>
-                    <strong>Restaurant Location</strong>
-                    <br />
-                    {order.rest_addr}
-                  </Popup>
-                </Marker>
-              </MapContainer>
-            ) : (
-              <p>Loading map...</p>
-            )}
+                    {/* Marker for Delivery Location */}
+                    <Marker position={[order.deliveryCoordinates.lat, order.deliveryCoordinates.lon]}>
+                      <Popup>
+                        <strong>Delivery Location</strong>
+                        <br />
+                        {order.location}
+                      </Popup>
+                    </Marker>
 
-            <div className="border-t mt-4 pt-4">
-              <div className="flex justify-between items-center">
-                <span className="text-gray-600 font-medium">Total Amount</span>
-                <span className="text-lg font-bold text-gray-800">
-                  ₹{order.orderTotal}
-                </span>
-              </div>
-            </div>
-            <div className="mt-4">
-              {order.orderStatus !== 'Delivered' && (
-                <button
-                  onClick={() => handleShipment(order.orderId)}
-                  className="w-full bg-orange-500 text-white py-3 rounded-lg shadow-lg hover:bg-orange-600 transition duration-200"
-                >
-                  Mark as Delivered
-                </button>
-              )}
-            </div>
-          </motion.div>
-        ))}
-      </div>
-      </>
+                    {/* Marker for Restaurant Location */}
+                    <Marker
+                      position={[
+                        order.restaurantCoordinates.lat,
+                        order.restaurantCoordinates.lon,
+                      ]}
+                    >
+                      <Popup>
+                        <strong>Restaurant Location</strong>
+                        <br />
+                        {order.rest_addr}
+                      </Popup>
+                    </Marker>
+                  </MapContainer>
+                ) : (
+                  <p>Loading map...</p>
+                )}
+
+                <div className="border-t mt-4 pt-4">
+                  <div className="flex justify-between items-center">
+                    <span className="text-gray-600 font-medium">Total Amount</span>
+                    <span className="text-lg font-bold text-gray-800">
+                      ₹{order.orderTotal}
+                    </span>
+                  </div>
+                </div>
+                <div className="mt-4">
+                  {order.orderStatus !== 'Delivered' && (
+                    <button
+                      onClick={() => handleShipment(order.orderId)}
+                      className="w-full bg-orange-500 text-white py-3 rounded-lg shadow-lg hover:bg-orange-600 transition duration-200"
+                    >
+                      Mark as Delivered
+                    </button>
+                  )}
+                </div>
+              </motion.div>
+            ))}
+          </div>
+        </>
       )}
     </div>
   );
