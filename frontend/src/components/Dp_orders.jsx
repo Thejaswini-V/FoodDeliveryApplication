@@ -564,7 +564,7 @@ const Dp_orders = () => {
     };
 
     fetchOrders(); // Initial fetch
-    const interval = setInterval(fetchOrders, 10000); // Fetch every 10 seconds
+    const interval = setInterval(fetchOrders, 30000); // Fetch every 10 seconds
 
     return () => clearInterval(interval); // Clear interval on component unmount
   }, []);

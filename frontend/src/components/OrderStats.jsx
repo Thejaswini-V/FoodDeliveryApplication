@@ -7,7 +7,7 @@ const OrderStats = () => {
   useEffect(() => {
     const fetchOrderStats = async () => {
       try {
-        const response = await axios.get('http://localhost:9000/api/orders/stats');
+        const response = await axios.get('http://localhost:9000/api/orders/getAllOrders');
         setOrderStats(response.data);
       } catch (error) {
         console.error('Error fetching order stats:', error);
@@ -37,8 +37,8 @@ const OrderStats = () => {
                 <td className="text-left py-3 px-4">{order.orderId}</td>
                 <td className="text-left py-3 px-4">{order.custId}</td>
                 <td className="text-left py-3 px-4">{order.restId}</td>
-                <td className="text-left py-3 px-4">{order.totalAmount}</td>
-                <td className="text-left py-3 px-4">{order.status}</td>
+                <td className="text-left py-3 px-4">{order.order_total}</td>
+                <td className="text-left py-3 px-4">{order.orderStatus}</td>
               </tr>
             ))}
           </tbody>

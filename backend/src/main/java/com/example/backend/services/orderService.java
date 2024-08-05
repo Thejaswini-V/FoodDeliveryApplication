@@ -176,4 +176,8 @@ public orderModel saveOrder(orderModel order) {
         order.setDeliveryTime(deliveryTime);
         orderRepository.save(order);
     }
+    public Iterable<orderModel> getAllOrders() {
+        return orderRepository.findAll();
+    }
+    
 }

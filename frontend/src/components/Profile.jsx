@@ -35,10 +35,10 @@ const Profile = () => {
         className="relative bg-white shadow-2xl rounded-lg p-8 max-w-md mx-auto text-center"
       >
         {/* Profile Image */}
-        <div className="absolute left-1/2 transform -translate-x-1/2 -top-12">
+        <div className="absolute left-1/2 transform -translate-x-1/2 -top-16">
           <img
-            className="w-24 h-24 rounded-full border-4 border-white shadow-md"
-            src="https://via.placeholder.com/150" // Placeholder image, replace with real image
+            className="w-32 h-32 rounded-full border-4 border-white shadow-lg"
+            src="./images/profile.png" // Placeholder image, replace with actual image URL
             alt="Profile"
           />
         </div>

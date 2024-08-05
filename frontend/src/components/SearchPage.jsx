@@ -693,9 +693,20 @@ const SearchPage = () => {
 
   // Initial fetch of cart details
   useEffect(() => {
+    setCart([])
     fetchCartDetails();
+
   }, []);
 
+  useEffect(()=>{
+    const queryParams=new URLSearchParams(location.search);
+    const name=queryParams.get('name')||'';
+    setSearchTerm(name);
+    if(name){
+      fetchData(name);
+    }
+    fetchCartDetails();
+  },[location.search]);
   return (
     <div className="min-h-screen bg-gray-100">
       <header className="bg-orange-500 text-white p-4 flex justify-between items-center">

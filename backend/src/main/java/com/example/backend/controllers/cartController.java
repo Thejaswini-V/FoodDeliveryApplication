@@ -32,40 +32,82 @@ public class cartController {
     @Autowired
     private restaurantRepository restaurant_repo;
 
+    // @PostMapping("/add")
+    // public ResponseEntity<?> addItemToCart(@RequestParam String restName,
+    //                                        @RequestParam String foodName,
+    //                                        @RequestParam int quantity,
+    //                                        HttpSession session) {
+    //     // Find restaurant by name
+    //     restaurantModel rest = restaurant_repo.findByRestName(restName).orElse(null);
+    //     if (rest == null) {
+    //         return ResponseEntity.badRequest().body("Restaurant not found");
+    //     }
+
+    //     // Find item by name
+    //     itemModel item = item_repo.findByfoodName(foodName).orElse(null);
+    //     if (item == null) {
+    //         return ResponseEntity.badRequest().body("Food item not found");
+    //     }
+
+    //     // Get the price from restaurant menu
+    //     double price = restaurantmenu.findPrice(item.getFoodId(), rest.getRestId());
+
+    //     // Retrieve cart from session or create new if not present
+    //     Cart cart = (Cart) session.getAttribute("cart");
+    //     if (cart == null || !cart.getRestaurantId().equals(rest.getRestId())) {
+    //         // Create a new cart for a different restaurant
+    //         cart = new Cart(rest.getRestId(), rest.getRestName());
+    //         session.setAttribute("cart", cart);
+    //     }
+
+    //     // Add item to cart
+    //     CartItem cartItem = new CartItem(item.getFoodId(), item.getFoodName(), quantity, price);
+    //     cart.addItem(cartItem);
+
+    //     return ResponseEntity.ok("Item added to cart");
+    // }
+
     @PostMapping("/add")
-    public ResponseEntity<?> addItemToCart(@RequestParam String restName,
-                                           @RequestParam String foodName,
-                                           @RequestParam int quantity,
-                                           HttpSession session) {
-        // Find restaurant by name
-        restaurantModel rest = restaurant_repo.findByRestName(restName).orElse(null);
-        if (rest == null) {
-            return ResponseEntity.badRequest().body("Restaurant not found");
-        }
-
-        // Find item by name
-        itemModel item = item_repo.findByfoodName(foodName).orElse(null);
-        if (item == null) {
-            return ResponseEntity.badRequest().body("Food item not found");
-        }
-
-        // Get the price from restaurant menu
-        double price = restaurantmenu.findPrice(item.getFoodId(), rest.getRestId());
-
-        // Retrieve cart from session or create new if not present
-        Cart cart = (Cart) session.getAttribute("cart");
-        if (cart == null || !cart.getRestaurantId().equals(rest.getRestId())) {
-            // Create a new cart for a different restaurant
-            cart = new Cart(rest.getRestId(), rest.getRestName());
-            session.setAttribute("cart", cart);
-        }
-
-        // Add item to cart
-        CartItem cartItem = new CartItem(item.getFoodId(), item.getFoodName(), quantity, price);
-        cart.addItem(cartItem);
-
-        return ResponseEntity.ok("Item added to cart");
+public ResponseEntity<?> addItemToCart(@RequestParam String restName,
+                                       @RequestParam String foodName,
+                                       @RequestParam int quantity,
+                                       HttpSession session) {
+    // Find restaurant by name
+    restaurantModel rest = restaurant_repo.findByRestName(restName).orElse(null);
+    if (rest == null) {
+        return ResponseEntity.badRequest().body("Restaurant not found");
     }
+
+    // Find item by name
+    itemModel item = item_repo.findByfoodName(foodName).orElse(null);
+    if (item == null) {
+        return ResponseEntity.badRequest().body("Food item not found");
+    }
+
+    // Check if the item is available in the restaurant's menu
+    boolean isAvailable = restaurantmenu.isAvailable(item.getFoodId(), rest.getRestId());
+    if (!isAvailable) {
+        return ResponseEntity.badRequest().body("Food item is not available in the selected restaurant");
+    }
+
+    // Get the price from restaurant menu
+    double price = restaurantmenu.findPrice(item.getFoodId(), rest.getRestId());
+
+    // Retrieve cart from session or create new if not present
+    Cart cart = (Cart) session.getAttribute("cart");
+    if (cart == null || !cart.getRestaurantId().equals(rest.getRestId())) {
+        // Create a new cart for a different restaurant
+        cart = new Cart(rest.getRestId(), rest.getRestName());
+        session.setAttribute("cart", cart);
+    }
+
+    // Add item to cart
+    CartItem cartItem = new CartItem(item.getFoodId(), item.getFoodName(), quantity, price);
+    cart.addItem(cartItem);
+
+    return ResponseEntity.ok("Item added to cart");
+}
+
 
     @DeleteMapping("/remove")
     public String removeItemFromCart(@RequestParam Long foodId, HttpSession session) {

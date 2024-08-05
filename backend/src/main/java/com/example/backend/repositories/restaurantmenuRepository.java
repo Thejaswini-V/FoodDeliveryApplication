@@ -20,6 +20,10 @@ public interface restaurantmenuRepository extends CrudRepository<restaurantmenuM
     //@Query(value="Select * from restaurant_menu where LOWER(foodName) LIKE LOWER(CONCAT('%', :foodName, '%'))",nativeQuery=true)
     Long findFoodIdByName(@Param("foodName")String foodName);
 
+    @Query(value="SELECT m.m_available FROM restaurant_menu m WHERE m.food_id = :foodId AND m.rest_id = :restId ",nativeQuery=true)
+    boolean isAvailable(@Param("foodId") Long foodId, @Param("restId") Long restId);
+
+
     @Query("SELECT rm.restId FROM restaurantmenuModel rm WHERE rm.foodId = :foodId")
     List<Long> findRestNumbersByFoodId(Long foodId);
 
