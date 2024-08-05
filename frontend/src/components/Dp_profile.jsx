@@ -27,18 +27,18 @@ const Dp_profile = () => {
   if (error) return <p className="text-red-500 text-center">{error}</p>;
 
   return (
-    <div className="flex justify-center items-center min-h-screen bg-gradient-to-r from-orange-500 to-red-500">
+    <div className="flex justify-center  items-center min-h-screen ">
       <motion.div
         initial={{ opacity: 0, scale: 0.95 }}
         animate={{ opacity: 1, scale: 1 }}
         transition={{ duration: 0.3 }}
-        className="relative bg-white shadow-lg rounded-lg p-8 max-w-lg mx-auto text-center"
+        className="relative bg-white shadow-2xl rounded-lg p-8 max-w-lg mx-auto text-center"
       >
         {/* Profile Image */}
         <div className="absolute left-1/2 transform -translate-x-1/2 -top-12">
           <img
-            className="w-24 h-24 rounded-full border-4 border-white shadow-md"
-            src="https://via.placeholder.com/150" // Placeholder image, replace with actual image URL
+            className="w-24 h-24 rounded-full border-4 border-orange-500 shadow-md"
+            src="./images/profile.png" // Placeholder image, replace with actual image URL
             alt="Profile"
           />
         </div>
@@ -50,18 +50,20 @@ const Dp_profile = () => {
           </h2>
           <div className="space-y-4 text-left">
             <p className="text-gray-700 flex items-center justify-center">
-              <FaEnvelope className="mr-2 text-purple-500" />
+              <FaEnvelope className="mr-2 text-orange-500" />
               <strong>Email:</strong> {deliveryPartner.dpMail}
             </p>
             <p className="text-gray-700 flex items-center justify-center">
-              <FaPhone className="mr-2 text-purple-500" />
+              <FaPhone className="mr-2 text-orange-500" />
               <strong>Phone:</strong> {deliveryPartner.deliveryPhn}
             </p>
             <p className="text-gray-700 flex items-center justify-center">
-              <FaMapMarkerAlt className="mr-2 text-purple-500" />
+              <FaMapMarkerAlt className="mr-2 text-orange-500" />
               <strong>Availability:</strong> {deliveryPartner.dpavailable ? 'Yes' : 'No'}
             </p>
-            {/* Additional fields if needed */}
+            <button className="mt-6 bg-pink-600 text-white px-11 py-2 rounded-full shadow-md hover:bg-pink-700 transition duration-200">
+            Change Availability
+          </button>
           </div>
         </div>
       </motion.div>

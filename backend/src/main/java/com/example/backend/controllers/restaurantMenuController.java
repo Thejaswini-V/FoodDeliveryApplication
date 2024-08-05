@@ -83,9 +83,9 @@ public class restaurantMenuController {
 
 
     @PatchMapping("/available")
-    public ResponseEntity<?> updateAvailability(@RequestParam Long itemId,@RequestParam Long restId, @RequestParam boolean available) {
+    public ResponseEntity<?> updateAvailability(@RequestParam Long itemId,HttpSession session, @RequestParam boolean available) {
         try {
-            menuService.setAvailability(itemId, restId,available);
+            menuService.setAvailability(itemId, (long)session.getAttribute("restId"),available);
             return ResponseEntity.ok("Item availability updated successfully");
         } catch (Exception e) {
             return ResponseEntity.badRequest().body("Failed to update item availability");

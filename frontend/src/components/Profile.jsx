@@ -27,12 +27,12 @@ const Profile = () => {
   if (error) return <p className="text-red-500">{error}</p>;
 
   return (
-    <div className="flex justify-center items-center min-h-screen bg-gradient-to-r from-pink-500 to-orange-500">
+    <div className="flex justify-center items-center min-h-screen ">
       <motion.div
         initial={{ opacity: 0, scale: 0.95 }}
         animate={{ opacity: 1, scale: 1 }}
         transition={{ duration: 0.3 }}
-        className="relative bg-white shadow-lg rounded-lg p-8 max-w-md mx-auto text-center"
+        className="relative bg-white shadow-2xl rounded-lg p-8 max-w-md mx-auto text-center"
       >
         {/* Profile Image */}
         <div className="absolute left-1/2 transform -translate-x-1/2 -top-12">

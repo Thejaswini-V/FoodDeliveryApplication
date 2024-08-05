@@ -472,7 +472,7 @@
 import React, { useState, useEffect } from 'react';
 import axios from 'axios';
 import { useNavigate, Link, useLocation } from 'react-router-dom';
-import { FaSearch, FaArrowLeft, FaShoppingCart, FaPlus, FaMinus, FaCheckCircle } from 'react-icons/fa';
+import { FaSearch, FaArrowLeft, FaShoppingCart, FaPlus, FaMinus, FaCheckCircle, FaMicrophone } from 'react-icons/fa';
 
 const SearchPage = () => {
   const [searchTerm, setSearchTerm] = useState('');
@@ -481,8 +481,27 @@ const SearchPage = () => {
   const [visibleCount, setVisibleCount] = useState(10);
   const [totalPrice, setTotalPrice] = useState(0);
   const [orderConfirmed, setOrderConfirmed] = useState(false);
+  const [isListening, setIsListening] = useState(false);
   const navigate = useNavigate();
+  const [currentRest,setcurrentRest]=useState('');
   const location = useLocation();
+
+  // Initialize voice recognition
+  const recognition = new (window.SpeechRecognition || window.webkitSpeechRecognition)();
+
+  recognition.continuous = false;
+  recognition.interimResults = false;
+  recognition.lang = 'en-US';
+
+  recognition.onresult = (event) => {
+    const transcript = event.results[0][0].transcript;
+    setSearchTerm(transcript);
+    fetchData(transcript);
+  };
+
+  recognition.onend = () => {
+    setIsListening(false);
+  };
 
   // Fetch data based on search term
   const fetchData = async (value) => {
@@ -530,7 +549,57 @@ const SearchPage = () => {
       alert('Failed to add item to cart. Please try again.');
     }
   };
+  const handleIncrease = async (item) => {
+    try {
+       const response = await axios.post(
+        'http://localhost:9000/api/cart/add',
+        null,
+        {
+          params: {
+            restName: currentRest, // Use restaurantName from the cart item
+            foodName: item.foodName,
+            quantity: 1,
+          },
+          withCredentials: true, // Important for session management
+        }
+      );
 
+      console.log(response.data);
+      alert(response.data);
+
+      // Fetch updated cart details
+      fetchCartDetails();
+    } catch (error) {
+      console.error('Error adding to cart:', error);
+      alert('Failed to increase item quantity. Please try again.');
+    }
+  };
+
+
+  // Decrease item quantity in cart via API
+  const handleDecrease = async (item) => {
+    try {
+      // Send a request to decrease the item quantity
+      const response = await axios.post('http://localhost:9000/api/cart/add', null, {
+        params: {
+          restName: currentRest,
+          foodName: item.foodName,
+          quantity: -1, // Decrease quantity by 1
+        },
+        withCredentials: true,
+      });
+  
+      console.log(response.data);
+      alert("quantity decreased");
+  
+      // Fetch updated cart details
+      fetchCartDetails();
+    } catch (error) {
+      console.error('Error decreasing item quantity:', error);
+      alert('Failed to decrease item quantity. Please try again.');
+    }
+  };
+  
   // Remove item from cart via API
   const handleRemoveFromCart = async (foodId) => {
     try {
@@ -597,6 +666,7 @@ const SearchPage = () => {
         const cartData = response.data;
         setCart(cartData.items);
         setTotalPrice(cartData.totalPrice);
+        setcurrentRest(cartData.restaurantName);
       }
     } catch (error) {
       console.error('Error fetching cart details:', error);
@@ -610,23 +680,24 @@ const SearchPage = () => {
     setVisibleCount((prevCount) => prevCount + 10);
   };
 
-  // Initial fetch of cart details and search term setup
-  useEffect(() => {
-    // Extract search term from query parameters
-    const queryParams = new URLSearchParams(location.search);
-    const name = queryParams.get('name') || '';
-    setSearchTerm(name);
-
-    if (name) {
-      fetchData(name);
+  // Start or stop voice recognition
+  const toggleVoiceRecognition = () => {
+    if (isListening) {
+      recognition.stop();
+    } else {
+      recognition.start();
     }
+    setIsListening(!isListening);
+  };
 
+  // Initial fetch of cart details
+  useEffect(() => {
     fetchCartDetails();
-  }, [location.search]);
+  }, []);
 
   return (
     <div className="min-h-screen bg-gray-100">
-      <header className="bg-orange-600 text-white p-4 flex justify-between items-center shadow-md">
+      <header className="bg-orange-500 text-white p-4 flex justify-between items-center">
         <div className="flex items-center">
           <Link to="/customerpage">
             <button className="flex items-center text-white hover:text-gray-200">
@@ -636,42 +707,44 @@ const SearchPage = () => {
           </Link>
         </div>
 
-        <div className="flex items-center flex-grow mx-4">
+        <div className="flex items-center">
           <input
             type="text"
             value={searchTerm}
             onChange={handleSearchChange}
             placeholder="Search for restaurants or dishes..."
-            className="flex-grow px-4 py-2 text-black rounded-l-md border-none focus:ring-2 focus:ring-orange-700"
+            className="px-4 py-2 w-full md:w-96 text-black rounded-l-md border-none focus:ring-2 focus:ring-orange-600"
           />
           <button className="bg-gray-800 text-white px-4 py-2 rounded-r-md">
             <FaSearch className="h-5 w-5" />
+          </button>
+          <button
+            onClick={toggleVoiceRecognition}
+            className={`ml-2 p-2 rounded-full ${isListening ? 'bg-red-500' : 'bg-gray-800'} text-white`}
+          >
+            <FaMicrophone className="h-5 w-5" />
           </button>
         </div>
 
         <div className="flex items-center">
           <Link to="/cart">
-            <button className="relative flex items-center">
-              <FaShoppingCart className="h-6 w-6 text-white" />
-              {cart.length > 0 && (
-                <span className="absolute -top-1 -right-1 bg-red-600 text-white text-xs font-bold rounded-full w-5 h-5 flex items-center justify-center">
-                  {cart.length}
-                </span>
-              )}
+            <button className="flex items-center text-white hover:text-gray-200">
+              <FaShoppingCart className="h-6 w-6 mr-2" />
+              <span>{cart.length} items</span>
             </button>
           </Link>
         </div>
       </header>
 
-      <main className="p-6 max-w-5xl mx-auto">
+      <main className="p-6 max-w-4xl mx-auto">
         {searchResults.length > 0 ? (
           <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
             {searchResults.slice(0, visibleCount).map((post, index) => (
               <div
                 key={index}
-                className="bg-white p-4 rounded-lg shadow-lg hover:shadow-xl transition-shadow flex flex-col"
+                className="bg-white p-4 rounded-lg shadow-md hover:shadow-lg cursor-pointer transition-shadow flex flex-col"
               >
-                <div className="flex items-center justify-between mb-4">
+                <div className="flex items-center justify-between">
                   <div>
                     <h3 className="font-bold text-xl text-gray-800">{post.restaurantName}</h3>
                     <p className="text-gray-600 mt-1">{post.foodName}</p>
@@ -679,14 +752,14 @@ const SearchPage = () => {
                   <img
                     src={`./images/${post.restaurantName.toLowerCase().replace(/\s/g, '')}.png`}
                     alt={post.restaurantName}
-                    className="w-16 h-16 rounded-full object-cover"
+                    className="w-12 h-12 rounded-full"
                   />
                 </div>
-                <p className="text-sm text-gray-600 mb-2">{post.foodCategory}</p>
-                <p className="text-lg text-orange-600 font-semibold mb-4">₹{post.foodPrice}</p>
+                <p className="text-sm text-gray-600 mt-2">{post.foodCategory}</p>
+                <p className="text-lg text-orange-500 font-semibold mt-2">₹{post.foodPrice}</p>
                 <button
                   onClick={() => handleAddToCart(post)}
-                  className="bg-orange-600 text-white px-4 py-2 rounded-md hover:bg-orange-700 transition-colors"
+                  className="mt-4 bg-orange-500 text-white px-4 py-2 rounded-md hover:bg-orange-600 transition-colors"
                 >
                   Add to Cart
                 </button>
@@ -694,44 +767,38 @@ const SearchPage = () => {
             ))}
           </div>
         ) : (
-          <div className="text-center text-gray-600 mt-8">
-            {searchTerm ? 'No results found.' : 'Type to search for restaurants or dishes.'}
-          </div>
+          <p>No results found</p>
         )}
 
-        {visibleCount < searchResults.length && (
-          <div className="flex justify-center mt-8">
-            <button
-              onClick={loadMoreResults}
-              className="bg-orange-600 text-white px-6 py-2 rounded-md hover:bg-orange-700 transition-colors"
-            >
-              Load More
-            </button>
-          </div>
+        {searchResults.length > visibleCount && (
+          <button
+            onClick={loadMoreResults}
+            className="mt-4 bg-gray-800 text-white px-6 py-2 rounded-md hover:bg-gray-900 transition-colors"
+          >
+            Load More
+          </button>
         )}
 
         {cart.length > 0 && (
-          <div className="mt-8 p-6 bg-white rounded-lg shadow-lg">
-            <h2 className="text-2xl font-bold mb-4">Cart</h2>
+          <div className="bg-white p-4 rounded-lg shadow-md mt-6">
+            <h2 className="text-xl font-bold mb-4">Your Cart</h2>
             {cart.map((item, index) => (
-              <div key={index} className="flex justify-between items-center mb-4">
+              <div key={index} className="flex justify-between items-center mb-2">
                 <div>
-                  <p className="text-lg font-semibold">{item.foodName}</p>
-                  <p className="text-sm text-gray-600">
-                    ₹{item.price.toFixed(2)} x {item.quantity}
-                  </p>
+                  <h3 className="font-semibold">{item.foodName}</h3>
+                  <p className="text-gray-600">₹{item.price} x {item.quantity}</p>
                 </div>
                 <div className="flex items-center">
                   <button
-                    onClick={() => handleRemoveFromCart(item.foodId)}
-                    className="bg-red-600 text-white px-2 py-1 rounded-md hover:bg-red-700 transition-colors"
+                    onClick={() => handleDecrease(item)}
+                    className="bg-red-500 text-white px-2 py-1 rounded-md hover:bg-red-600 transition-colors"
                   >
                     <FaMinus className="h-4 w-4" />
                   </button>
                   <span className="mx-2">{item.quantity}</span>
                   <button
-                    onClick={() => handleAddToCart(item)}
-                    className="bg-green-600 text-white px-2 py-1 rounded-md hover:bg-green-700 transition-colors"
+                    onClick={() => handleIncrease(item)}
+                    className="bg-green-500 text-white px-2 py-1 rounded-md hover:bg-green-600 transition-colors"
                   >
                     <FaPlus className="h-4 w-4" />
                   </button>
@@ -739,21 +806,15 @@ const SearchPage = () => {
               </div>
             ))}
             <div className="flex justify-between items-center mt-4">
-              <span className="text-lg font-semibold">Total:</span>
-              <span className="text-xl font-bold text-orange-600">₹{totalPrice.toFixed(2)}</span>
+              <h3 className="text-lg font-bold">Total:</h3>
+              <p className="text-xl font-bold text-orange-500">₹{totalPrice}</p>
             </div>
+            
             <button
               onClick={handleConfirmOrder}
-              className="mt-4 bg-orange-600 text-white px-4 py-2 rounded-md hover:bg-orange-700 transition-colors w-full"
+              className="mt-4 bg-orange-500 text-white px-4 py-2 rounded-md hover:bg-orange-600 transition-colors w-full"
             >
-              {orderConfirmed ? (
-                <span className="flex items-center justify-center">
-                  <FaCheckCircle className="h-5 w-5 text-green-600 mr-2" />
-                  Order Confirmed
-                </span>
-              ) : (
-                'Confirm Order'
-              )}
+              {orderConfirmed ? <FaCheckCircle className="inline h-5 w-5" /> : 'Confirm Order'}
             </button>
           </div>
         )}

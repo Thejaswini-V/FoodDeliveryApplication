@@ -162,7 +162,7 @@ const Orders = () => {
 
     const interval = setInterval(() => {
       fetchOrders();
-    }, 1000);
+    }, 30000);
   }, []);
 
   // Function to handle shipment for an order
@@ -227,7 +227,7 @@ const Orders = () => {
           >
             {/* Status Indicator */}
             <div className="absolute top-2 right-2 flex items-center">
-              {order.orderStatus === 'Shipped' ? (
+              {order.status === 'Shipped' ? (
                 <FaCheckCircle className="text-green-500 text-2xl" />
               ) : (
                 <FaTimesCircle className="text-red-500 text-2xl" />
@@ -262,7 +262,7 @@ const Orders = () => {
                 <FaUser className="inline-block mr-2" />
                 <span>{order.custName}</span> {/* Assuming custName is available */}
               </div>
-              {order.orderStatus !== 'Shipped' && (
+              {order.status !== 'Shipped' && (
                 <button
                   onClick={() => handleShipment(order.orderId)}
                   className="bg-orange-500 text-white px-4 py-2 rounded hover:bg-orange-600 transition shadow-neumorphic"

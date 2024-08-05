@@ -70,6 +70,11 @@ public class customerController {
             return ResponseEntity.badRequest().body("Invalid credentials");
         }
     }
+    @PostMapping("/logout")
+    public ResponseEntity<String> logout(HttpSession session) {
+        session.invalidate();
+        return ResponseEntity.ok("Logout successful");
+    }
 
     @GetMapping("/searchbyname")
     public ResponseEntity<?> searchByName(@RequestParam String foodName) {
