@@ -662,6 +662,7 @@ const SearchPage = () => {
       if (typeof response.data === 'string' && response.data.includes('Cart is empty')) {
         setCart([]);
         setTotalPrice(0);
+        setcurrentRest('');
       } else {
         const cartData = response.data;
         setCart(cartData.items);
