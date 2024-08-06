@@ -4,13 +4,14 @@ import com.example.backend.models.restaurantModel;
 import com.example.backend.models.restaurantmenuModel;
 
 import org.springframework.data.repository.query.Param;
+import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
-import org.springframework.data.repository.CrudRepository;
+
 import org.springframework.stereotype.Repository;
 import java.util.*;
 
 @Repository
-public interface restaurantRepository extends CrudRepository<restaurantModel, Long> {
+public interface restaurantRepository extends JpaRepository<restaurantModel, Long> {
     restaurantModel findByRestMail(String restMail);
     restaurantModel findByRestMailAndRestPswd(String restMail, String restPswd);
 
@@ -23,6 +24,9 @@ public interface restaurantRepository extends CrudRepository<restaurantModel, Lo
     restaurantModel findByRestId(Long restId);
 
     Optional<restaurantModel> findByRestName(String restName);
+
+    @Query("SELECT COUNT(r) FROM restaurantModel r")
+    long countRestaurants();
 
    
 

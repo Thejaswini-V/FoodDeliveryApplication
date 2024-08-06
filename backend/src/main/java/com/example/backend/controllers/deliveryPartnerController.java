@@ -13,6 +13,7 @@ import com.example.backend.services.deliverypartnerService;
 import com.example.backend.services.orderService;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
@@ -32,19 +33,22 @@ public class deliveryPartnerController {
 
     @Autowired
     private orderService order_Service;
+
     @PostMapping("/addDP")
     public deliverypartnerModel addDP(@RequestBody deliverypartnerModel dp) {
         return dpService.saveDeliveryPartner(dp);
     }
 
     // @GetMapping("/findOrders")
-    // public ResponseEntity<List<OrderDisplayDTO>> findDeliveryOrders(HttpSession session) {
-    //     Long dpId = (Long) session.getAttribute("deliveryId");
-    //     if (dpId == null) {
-    //         return ResponseEntity.status(401).body(null); // Unauthorized if no deliveryId in session
-    //     }
-    //     List<OrderDisplayDTO> orders = dpService.findDeliveryOrders(dpId);
-    //     return ResponseEntity.ok(orders);
+    // public ResponseEntity<List<OrderDisplayDTO>> findDeliveryOrders(HttpSession
+    // session) {
+    // Long dpId = (Long) session.getAttribute("deliveryId");
+    // if (dpId == null) {
+    // return ResponseEntity.status(401).body(null); // Unauthorized if no
+    // deliveryId in session
+    // }
+    // List<OrderDisplayDTO> orders = dpService.findDeliveryOrders(dpId);
+    // return ResponseEntity.ok(orders);
     // }
 
     @GetMapping("/getAllDP")
@@ -54,10 +58,8 @@ public class deliveryPartnerController {
 
     @GetMapping("get")
     public deliverypartnerModel getDPById(HttpSession httpSession) {
-        return dpService.getDPById((long)httpSession.getAttribute("deliveryId"));
-    }    
-    
-    
+        return dpService.getDPById((long) httpSession.getAttribute("deliveryId"));
+    }
 
     @PutMapping("update/{id}")
     public deliverypartnerModel updateDP(@PathVariable Long id, @RequestBody deliverypartnerModel dp) {
@@ -71,7 +73,8 @@ public class deliveryPartnerController {
     }
 
     @PostMapping("/login")
-    public ResponseEntity<String> login(@RequestParam String email, @RequestParam String password, HttpSession session) {
+    public ResponseEntity<String> login(@RequestParam String email, @RequestParam String password,
+            HttpSession session) {
         deliverypartnerModel dp = deliverypartner_Repository.findByDpMail(email);
         if (dp != null && dpService.validateLogin(email, password)) {
             session.setAttribute("deliveryId", dp.getDeliveryId());
@@ -80,44 +83,65 @@ public class deliveryPartnerController {
             return ResponseEntity.badRequest().body("Invalid credentials");
         }
     }
-    
+
     @PostMapping("/logout")
     public ResponseEntity<String> logout(HttpSession session) {
         session.invalidate();
         return ResponseEntity.ok("Logout successful");
     }
 
-//    @GetMapping("/findOrders")
-//    public  ResponseEntity<List<orderModel>> findDeliveryOrders(HttpSession session) {
-//        Long dpId = (Long) session.getAttribute("deliveryId");
-//        if (dpId == null) {
-//            return ResponseEntity.status(401).body(null);
-//        }
-//        List<orderModel> orders = dpService.findDeliveryOrders(dpId);
-//        return ResponseEntity.ok(orders);
-//    }
-
-
+    // @GetMapping("/findOrders")
+    // public ResponseEntity<List<orderModel>> findDeliveryOrders(HttpSession
+    // session) {
+    // Long dpId = (Long) session.getAttribute("deliveryId");
+    // if (dpId == null) {
+    // return ResponseEntity.status(401).body(null);
+    // }
+    // List<orderModel> orders = dpService.findDeliveryOrders(dpId);
+    // return ResponseEntity.ok(orders);
+    // }
 
     @PostMapping("/delivered")
-    public ResponseEntity<String> delivered(HttpSession session,@RequestParam Long order_id) {
+    public ResponseEntity<String> delivered(HttpSession session, @RequestParam Long order_id) {
         try {
-            dpService.delivered(session,order_id);
+            dpService.delivered(session, order_id);
             return ResponseEntity.ok("Delivery status updated successfully.");
         } catch (RuntimeException e) {
             return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(e.getMessage());
         }
     }
-    @GetMapping("/findOrders")
-public ResponseEntity<List<OrderDisplayDTO>> findDeliveryOrders(HttpSession session) {
-    Long dpId = (Long) session.getAttribute("deliveryId");
-    if (dpId == null) {
-        return ResponseEntity.status(401).body(null); // Unauthorized if no deliveryId in session
-    }
-    List<OrderDisplayDTO> orders = order_Service.getOrdersByDeliveryPartnerId(dpId);
-    return ResponseEntity.ok(orders);
-}
 
+    @GetMapping("/findOrders")
+    public ResponseEntity<List<OrderDisplayDTO>> findDeliveryOrders(HttpSession session) {
+        Long dpId = (Long) session.getAttribute("deliveryId");
+        if (dpId == null) {
+            return ResponseEntity.status(401).body(null); // Unauthorized if no deliveryId in session
+        }
+        List<OrderDisplayDTO> orders = order_Service.getOrdersByDeliveryPartnerId(dpId);
+        return ResponseEntity.ok(orders);
+    }
+
+    @PatchMapping("/updateAvailability")
+    public ResponseEntity<String> updateAvailability(HttpSession session, @RequestParam boolean available) {
+        try {
+            deliverypartnerModel dp = dpService.getDPById((Long) session.getAttribute("deliveryId"));
+            if (dp == null) {
+                return ResponseEntity.status(HttpStatus.NOT_FOUND).body("Delivery Partner not found");
+            }
+            dp.setDpavailable(available);
+            dpService.updateDeliveryPartner(dp);
+            return ResponseEntity.ok("Availability status updated successfully");
+        } catch (Exception e) {
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("Error updating availability status");
+        }
+    }
+    @GetMapping("/deliveryPartnerCount")
+    public ResponseEntity<Map<String, Long>> getDeliveryPartnerCount() {
+        Long count = deliverypartner_Repository.countDeliveryPartners();
+        Map<String, Long> response = new HashMap<>();
+        response.put("count", count);
+        return ResponseEntity.ok(response);
+    }
 
 
 }

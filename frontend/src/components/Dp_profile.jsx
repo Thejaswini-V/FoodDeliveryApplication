@@ -21,6 +21,40 @@ const Dp_profile = () => {
         console.error('Error fetching delivery partner details:', error);
       });
   }, []);
+  const toggleAvailability = async (newAvailability) => {
+
+    try {
+
+      
+
+      console.log(`Sending PATCH request available: ${newAvailability}`);
+
+      const response = await axios.patch('http://localhost:9000/api/delivery_partner/updateAvailability', null, {
+
+        params: { available: newAvailability },
+
+        withCredentials: true,
+
+      });
+
+      console.log('Response from server:', response.data);
+
+      setDeliveryPartner((prevPartner) => ({
+        ...prevPartner,
+        dpavailable: newAvailability,
+      }));
+
+    } catch (error) {
+
+      console.error('Error updating availability:', error);
+
+      setError('Failed to update item availability');
+
+    }
+
+  };
+
+ 
 
   if (loading) return <p className="text-center text-gray-500">Loading...</p>;
 
@@ -61,7 +95,8 @@ const Dp_profile = () => {
               <FaMapMarkerAlt className="mr-2 text-orange-500" />
               <strong>Availability:</strong> {deliveryPartner.dpavailable ? 'Yes' : 'No'}
             </p>
-            <button className="mt-6 bg-pink-600 text-white px-11 py-2 rounded-full shadow-md hover:bg-pink-700 transition duration-200">
+            <button className="mt-6 bg-pink-600 text-white px-11 py-2 rounded-full shadow-md hover:bg-pink-700 transition duration-200"
+            onClick={()=>toggleAvailability(!deliveryPartner.dpavailable)}>
             Change Availability
           </button>
           </div>

@@ -47,7 +47,7 @@ const Sidebar = ({ setActiveTab }) => {
           className="sidebar-item flex items-center mb-4 p-3 rounded-lg hover:bg-orange-500 transition-all cursor-pointer"
         >
           <FaChartBar className="mr-3 text-xl" />
-          <span className="text-lg font-medium">Order Stats</span>
+          <span className="text-lg font-medium">Order & User Statistics</span>
         </li>
       </ul>
       <div>

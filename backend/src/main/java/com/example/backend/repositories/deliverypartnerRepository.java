@@ -14,4 +14,7 @@ public interface deliverypartnerRepository extends CrudRepository<deliverypartne
     deliverypartnerModel findByDpMailAndDpPswd(String mail,String pswd);
     @Query(value = "SELECT * FROM Delivery_partner WHERE dp_available = true LIMIT 1", nativeQuery = true)
     deliverypartnerModel findFirstByDpavailable(@Param("available") boolean available);
+
+    @Query("SELECT COUNT(d) FROM deliverypartnerModel d")
+    long countDeliveryPartners();
 }

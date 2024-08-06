@@ -144,4 +144,16 @@ public class deliverypartnerService {
 //        return orderService.getOrdersByDeliveryId(dp_id);
 //    }
 
+
+
+public void updateAvailability(Long id, boolean available) {
+    deliverypartnerModel dp = getDPById(id);
+    if (dp != null) {
+        dp.setDpavailable(available);
+        updateDeliveryPartner(dp);
+    }
+}
+
+
+
 }

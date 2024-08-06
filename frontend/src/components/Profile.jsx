@@ -68,9 +68,9 @@ const Profile = () => {
               <span>Ratings</span>
             </div>
           </div>
-          <button className="mt-6 bg-pink-600 text-white px-6 py-2 rounded-full shadow-md hover:bg-pink-700 transition duration-200">
+          {/* <button className="mt-6 bg-pink-600 text-white px-6 py-2 rounded-full shadow-md hover:bg-pink-700 transition duration-200">
             Update Profile
-          </button>
+          </button> */}
         </div>
       </motion.div>
     </div>

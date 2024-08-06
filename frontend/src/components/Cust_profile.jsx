@@ -66,10 +66,10 @@ const Cust_profile = () => {
             </div>
             {/* Add other fields as needed */}
           </div>
-          <button className="mt-8 bg-gradient-to-r from-orange-600 to-orange-600 text-white px-6 py-3 rounded-full shadow-lg flex items-center justify-center gap-2 hover:from-orange-700 hover:to-orange-700 transition-all duration-300">
+          {/* <button className="mt-8 bg-gradient-to-r from-orange-600 to-orange-600 text-white px-6 py-3 rounded-full shadow-lg flex items-center justify-center gap-2 hover:from-orange-700 hover:to-orange-700 transition-all duration-300">
             <FaUserEdit />
             Update Profile
-          </button>
+          </button> */}
         </div>
       </motion.div>
     </div>

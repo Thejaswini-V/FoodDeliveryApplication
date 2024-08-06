@@ -296,17 +296,6 @@ const CustomerLanding = () => {
   const [snackbarVisible, setSnackbarVisible] = useState(true);
   const navigate = useNavigate();
 
-  // const sliderSettings = {
-  //   dots: true,
-  //   infinite: true,
-  //   speed: 2000,
-  //   slidesToShow: 1,
-  //   slidesToScroll: 1,
-  //   autoplay: true,
-  //   autoplaySpeed: 3000,
-  //   cssEase: 'linear',
-  //   pauseOnHover: false,
-  // };
   const sliderSettings = {
     dots: true,
     infinite: true,
@@ -317,8 +306,14 @@ const CustomerLanding = () => {
     autoplaySpeed: 3000,
     cssEase: 'linear',
     pauseOnHover: false,
-     // This will adjust the height dynamically
+    appendDots: dots => (
+      <div style={{ bottom: '-20px' }}>
+        <ul style={{ margin: '0px' }}> {dots} </ul>
+      </div>
+    ),
+    dotsClass: 'slick-dots', // Add custom class if needed
   };
+  
 
   // Function to handle navigation to the search page with a restaurant name or food item
   const handleNavigateToSearch = (name) => {
@@ -352,19 +347,19 @@ const CustomerLanding = () => {
       <div className="p-6 bg-white">
         <Slider {...sliderSettings}>
           <div>
-            <img src="./images/carousel1.png" alt="Slide 1" className="w-full h-3/5 object-cover" />
+            <img src="./images/carousel1.png" alt="Slide 1" className="w-full h-96 object-cover" />
           </div>
           <div>
-            <img src="./images/food1.jpg" alt="Slide 2" className="w-full h-3/5 object-cover" />
+            <img src="./images/food1.jpg" alt="Slide 2" className="w-full h-96 object-cover" />
           </div>
           <div>
-            <img src="./images/food4.jpg" alt="Slide 3" className="w-full h-3/5 object-cover" />
+            <img src="./images/food4.jpg" alt="Slide 3" className="w-full h-96 object-cover" />
           </div>
           <div>
-            <img src="./images/food7.jpg" alt="Slide 4" className="w-full h-3/5 object-cover" />
+            <img src="./images/food7.jpg" alt="Slide 4" className="w-full h-96 object-cover" />
           </div>
           <div>
-            <img src="./images/food5.jpg" alt="Slide 5" className="w-full h-3/5 object-cover" />
+            <img src="./images/food5.jpg" alt="Slide 5" className="w-full h-96 object-cover" />
           </div>
         </Slider>
       </div>

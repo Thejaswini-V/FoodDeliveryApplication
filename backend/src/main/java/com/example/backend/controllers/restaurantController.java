@@ -18,7 +18,9 @@ import com.example.backend.services.restaurantService;
 import com.example.backend.services.restaurantmenuService;
 
 import java.sql.Time;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 
 
@@ -157,6 +159,15 @@ public ResponseEntity<List<OrderDisplayDTO>> findRestaurantOrders(HttpSession se
         return ResponseEntity.noContent().build();
     }
 }
+
+     @GetMapping("/restaurantCount")
+    public ResponseEntity<Map<String, Long>> getRestaurantCount() {
+        long count = restaurantRepository.countRestaurants();
+        Map<String, Long> response = new HashMap<>();
+        response.put("count", count);
+        return ResponseEntity.ok(response);
+    }
+
 
 
 }

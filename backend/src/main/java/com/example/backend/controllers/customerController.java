@@ -9,6 +9,7 @@ import com.example.backend.services.customerService;
 
 import com.example.backend.services.restaurantmenuService;
 
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
@@ -125,5 +126,12 @@ public ResponseEntity<List<OrderDisplayDTO>> findCustomerOrders(HttpSession sess
     List<OrderDisplayDTO> orders = orderService.getOrdersByCustomerId(custId);
     return ResponseEntity.ok(orders);
 }
+@GetMapping("/customerCount")
+    public ResponseEntity<Map<String, Long>> getCustomerCount() {
+        long count = customer_repo.countCustomers();
+        Map<String,Long> response = new HashMap<>();
+        response.put("count", count);
+        return ResponseEntity.ok(response);
+    }
 }
 
