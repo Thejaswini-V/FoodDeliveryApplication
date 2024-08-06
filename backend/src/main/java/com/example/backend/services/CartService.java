@@ -41,6 +41,7 @@ public class CartService {
     }
 
     public void removeItemFromCart(Cart cart, Long foodId) {
+        
         cart.removeItem(foodId);
     }
 

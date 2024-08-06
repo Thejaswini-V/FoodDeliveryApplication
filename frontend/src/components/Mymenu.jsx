@@ -393,7 +393,7 @@ const Mymenu = () => {
 
               <p>Price: ₹{item.foodPrice}</p>
 
-              <p>Preparation Time: {item.preparationTime}</p>
+              {/* <p>Preparation Time: {item.preparationTime}</p> */}
 
               <p>Available: {item.mavailable ? 'Yes' : 'No'}</p>
 

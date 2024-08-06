@@ -579,26 +579,44 @@ const SearchPage = () => {
   // Decrease item quantity in cart via API
   const handleDecrease = async (item) => {
     try {
-      // Send a request to decrease the item quantity
-      const response = await axios.post('http://localhost:9000/api/cart/add', null, {
-        params: {
-          restName: currentRest,
-          foodName: item.foodName,
-          quantity: -1, // Decrease quantity by 1
-        },
-        withCredentials: true,
-      });
+      // Check if the quantity is greater than 1
+      if (item.quantity > 1) {
+        // Decrease the item quantity
+        const response = await axios.post('http://localhost:9000/api/cart/add', null, {
+          params: {
+            restName: currentRest,
+            foodName: item.foodName,
+            quantity: -1, // Decrease quantity by 1
+          },
+          withCredentials: true,
+        });
   
-      console.log(response.data);
-      alert("quantity decreased");
+        console.log(response.data);
+        alert("Quantity decreased");
   
-      // Fetch updated cart details
-      fetchCartDetails();
+        // Fetch updated cart details
+        fetchCartDetails();
+      } else if (item.quantity === 1) {
+        // Remove the item from cart if quantity is 1
+        const response = await axios.delete('http://localhost:9000/api/cart/remove', {
+          params: {
+            foodId: item.foodId, // Assuming `foodId` is available in `item`
+          },
+          withCredentials: true,
+        });
+  
+        console.log(response.data);
+        alert("Item removed from cart");
+  
+        // Fetch updated cart details
+        fetchCartDetails();
+      }
     } catch (error) {
       console.error('Error decreasing item quantity:', error);
       alert('Failed to decrease item quantity. Please try again.');
     }
   };
+  
   
   // Remove item from cart via API
   const handleRemoveFromCart = async (foodId) => {
@@ -693,7 +711,6 @@ const SearchPage = () => {
 
   // Initial fetch of cart details
   useEffect(() => {
-    setCart([])
     fetchCartDetails();
 
   }, []);
@@ -719,7 +736,7 @@ const SearchPage = () => {
           </Link>
         </div>
 
-        <div className="flex items-center">
+        <div className="flex items-center justify-between">
           <input
             type="text"
             value={searchTerm}
@@ -727,9 +744,7 @@ const SearchPage = () => {
             placeholder="Search for restaurants or dishes..."
             className="px-4 py-2 w-full md:w-96 text-black rounded-l-md border-none focus:ring-2 focus:ring-orange-600"
           />
-          <button className="bg-gray-800 text-white px-4 py-2 rounded-r-md">
-            <FaSearch className="h-5 w-5" />
-          </button>
+          
           <button
             onClick={toggleVoiceRecognition}
             className={`ml-2 p-2 rounded-full ${isListening ? 'bg-red-500' : 'bg-gray-800'} text-white`}
@@ -738,14 +753,14 @@ const SearchPage = () => {
           </button>
         </div>
 
-        <div className="flex items-center">
+        {/* <div className="flex items-center">
           <Link to="/cart">
             <button className="flex items-center text-white hover:text-gray-200">
               <FaShoppingCart className="h-6 w-6 mr-2" />
               <span>{cart.length} items</span>
             </button>
           </Link>
-        </div>
+        </div> */}
       </header>
 
       <main className="p-6 max-w-4xl mx-auto">

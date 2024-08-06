@@ -28,8 +28,12 @@ public class Cart {
     public void addItem(CartItem item) {
         for (CartItem cartItem : items) {
             if (cartItem.getFoodId().equals(item.getFoodId())) {
+                if(cartItem.getQuantity() + item.getQuantity()>=1){
                 cartItem.setQuantity(cartItem.getQuantity() + item.getQuantity());
-                return;
+                return;}
+            else{
+                return ;
+            }  
             }
         }
         items.add(item);

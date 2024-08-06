@@ -162,7 +162,7 @@ const Orders = () => {
 
     const interval = setInterval(() => {
       fetchOrders();
-    }, 30000);
+    }, 1000);
   }, []);
 
   // Function to handle shipment for an order

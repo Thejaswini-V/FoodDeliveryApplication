@@ -296,6 +296,17 @@ const CustomerLanding = () => {
   const [snackbarVisible, setSnackbarVisible] = useState(true);
   const navigate = useNavigate();
 
+  // const sliderSettings = {
+  //   dots: true,
+  //   infinite: true,
+  //   speed: 2000,
+  //   slidesToShow: 1,
+  //   slidesToScroll: 1,
+  //   autoplay: true,
+  //   autoplaySpeed: 3000,
+  //   cssEase: 'linear',
+  //   pauseOnHover: false,
+  // };
   const sliderSettings = {
     dots: true,
     infinite: true,
@@ -306,6 +317,7 @@ const CustomerLanding = () => {
     autoplaySpeed: 3000,
     cssEase: 'linear',
     pauseOnHover: false,
+     // This will adjust the height dynamically
   };
 
   // Function to handle navigation to the search page with a restaurant name or food item
@@ -340,19 +352,19 @@ const CustomerLanding = () => {
       <div className="p-6 bg-white">
         <Slider {...sliderSettings}>
           <div>
-            <img src="./images/carousel1.png" alt="Slide 1" className="w-full h-80 object-cover" />
+            <img src="./images/carousel1.png" alt="Slide 1" className="w-full h-3/5 object-cover" />
           </div>
           <div>
-            <img src="./images/carousel2.png" alt="Slide 2" className="w-full h-80 object-cover" />
+            <img src="./images/food1.jpg" alt="Slide 2" className="w-full h-3/5 object-cover" />
           </div>
           <div>
-            <img src="./images/carousel3.png" alt="Slide 3" className="w-full h-80 object-cover" />
+            <img src="./images/food4.jpg" alt="Slide 3" className="w-full h-3/5 object-cover" />
           </div>
           <div>
-            <img src="./images/carousel4.png" alt="Slide 4" className="w-full h-80 object-cover" />
+            <img src="./images/food7.jpg" alt="Slide 4" className="w-full h-3/5 object-cover" />
           </div>
           <div>
-            <img src="./images/carousel5.jpeg" alt="Slide 5" className="w-full h-80 object-cover" />
+            <img src="./images/food5.jpg" alt="Slide 5" className="w-full h-3/5 object-cover" />
           </div>
         </Slider>
       </div>
@@ -383,7 +395,7 @@ const CustomerLanding = () => {
             </div>
             <div
               className="bg-white p-4 cursor-pointer"
-              onClick={() => handleNavigateToSearch('Cakes')}
+              onClick={() => handleNavigateToSearch('cake')}
             >
               <img src="./images/foods/Cakes.jpg" alt="Cakes" className="w-full h-40 object-cover rounded-t-lg" />
               
