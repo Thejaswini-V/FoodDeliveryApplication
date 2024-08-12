@@ -712,7 +712,7 @@ const Dp_orders = () => {
                   </div>
                 </div>
 
-                {/* Display Leaflet Map with both Delivery and Restaurant Address Pins */}
+                
                 {order.deliveryCoordinates && order.restaurantCoordinates ? (
                   <MapContainer
                     center={[
@@ -736,7 +736,7 @@ const Dp_orders = () => {
                       </Popup>
                     </Marker>
 
-                    {/* Marker for Restaurant Location */}
+                    
                     <Marker
                       position={[
                         order.restaurantCoordinates.lat,

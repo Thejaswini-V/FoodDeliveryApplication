@@ -418,7 +418,7 @@ const CustomerLanding = () => {
             </div>
             <div
               className="bg-white p-4 cursor-pointer"
-              onClick={() => handleNavigateToSearch('shakes')}
+              onClick={() => handleNavigateToSearch('pizza')}
             >
               <img src="./images/foods/pizza.png" alt="Parotta" className="w-full h-40 object-cover rounded-t-lg" />
               
@@ -447,7 +447,7 @@ const CustomerLanding = () => {
           </div>
           <div
             className="bg-white p-6 rounded-lg shadow-md cursor-pointer"
-            onClick={() => handleNavigateToSearch('DindugulThalapakkati')}
+            onClick={() => handleNavigateToSearch('dindugul thalapakkati')}
           >
             <img src="./images/thalapakkati.png" alt="Restaurant 3" className="w-full h-40 object-cover rounded-t-lg" />
             <h3 className="text-xl font-bold mt-4">Dindugul Thalapakkati</h3>

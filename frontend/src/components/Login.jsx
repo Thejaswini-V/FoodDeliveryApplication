@@ -104,11 +104,7 @@ const Login = () => {
                             <label htmlFor="password" className="block text-sm font-medium leading-6 text-gray-900">
                                 Password
                             </label>
-                            <div className="text-sm">
-                                <a href="#" className="font-semibold text-orange-500 hover:text-orange-600">
-                                    Forgot password?
-                                </a>
-                            </div>
+                            
                         </div>
                         <div className="mt-2">
                             <input

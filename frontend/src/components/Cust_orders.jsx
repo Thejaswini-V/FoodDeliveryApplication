@@ -137,7 +137,7 @@ const Cust_orders = () => {
           >
             <div className="flex items-center justify-between mb-4">
               <h3 className="text-xl font-semibold text-gray-800">Order ID: {order.orderId}</h3>
-              {order.orderStatus === 'Delivered' ? (
+              {order.status === 'Delivered' ? (
                 <FaCheckCircle className="text-green-500 text-2xl" />
               ) : (
                 <FaTimesCircle className="text-red-500 text-2xl" />

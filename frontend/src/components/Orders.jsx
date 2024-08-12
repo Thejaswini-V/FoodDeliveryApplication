@@ -246,20 +246,18 @@ const Orders = () => {
                   <p className="text-gray-600">
                     <strong>Quantity:</strong> {item.quantity}
                   </p>
-                  <p className="text-gray-600">
-                    <strong>Suggestion:</strong> {item.suggestion || 'None'}
-                  </p>
+                  
                 </div>
               ))}
 
               <p className="text-gray-600">
-                <strong>Order Total:</strong> ${order.orderTotal.toFixed(2)}
+                <strong>Order Total:</strong> ₹{order.orderTotal.toFixed(2)}
               </p>
             </div>
 
             <div className="mt-4 flex justify-between items-center">
               <div className="flex items-center text-gray-500">
-                <FaUser className="inline-block mr-2" />
+               
                 <span>{order.custName}</span> {/* Assuming custName is available */}
               </div>
               {order.status !== 'Shipped' && (
